@@ -7,7 +7,8 @@ public class Point : MonoBehaviour
 {
     private Color defaultColour;
     private bool switchedOn = false;
-    private static int pressing = 0;
+    private bool pressing = false;
+    private static int totalPressing = 0;
 
     public void Awake()
     {
@@ -33,7 +34,7 @@ public class Point : MonoBehaviour
     {
         if (switchedOn)
         {
-            pressing++;
+            totalPressing++;
         }
     }
 
@@ -41,13 +42,13 @@ public class Point : MonoBehaviour
     {
         if (switchedOn)
         {
-            pressing--;
+            totalPressing--;
         }
     }
 
     public static int Pressing()
     {
-        return pressing;
+        return totalPressing;
     }
 }
 
