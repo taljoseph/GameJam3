@@ -615,8 +615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f11b201c9a68348a592823ce4828f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: {fileID: 0}
+  points: {fileID: 1534103997}
   timeToDeactivate: 10
+  addTime: 2
 --- !u!1 &512173758
 GameObject:
   m_ObjectHideFlags: 0

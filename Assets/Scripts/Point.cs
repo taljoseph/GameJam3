@@ -20,9 +20,9 @@ public class Point : MonoBehaviour
         GetComponent<SpriteRenderer>().color = newColour;
     }
 
-    public void SwitchStatus()
+    public void SetActive(bool value)
     {
-        switchedOn = !switchedOn;
+        switchedOn = value;
     }
 
     public bool IsOn()
@@ -30,11 +30,22 @@ public class Point : MonoBehaviour
         return switchedOn;
     }
 
+    public bool IsPressed()
+    {
+        return pressing;
+    }
+
+    public void SetPressing(bool value)
+    {
+        pressing = value;
+    }
+
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (switchedOn)
         {
             totalPressing++;
+            pressing = true;
         }
     }
 
@@ -43,12 +54,18 @@ public class Point : MonoBehaviour
         if (switchedOn)
         {
             totalPressing--;
+            pressing = false;
         }
     }
 
     public static int Pressing()
     {
         return totalPressing;
+    }
+
+    public static void ResetTotalPressing()
+    {
+        totalPressing = 0;
     }
 }
 
