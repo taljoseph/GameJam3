@@ -32,6 +32,13 @@ public class GManager : MonoBehaviour
             _activePoints.Add(point);
             point.SetActive(true);
             point.SetColour(Color.red);
+            if (point.NumTouching() > 0)
+            {
+                for (int j = 0; j < point.NumTouching(); j++)
+                {
+                    point.SetPressingUp();
+                }
+            }
         }
     }
 
@@ -69,7 +76,7 @@ public class GManager : MonoBehaviour
                     if (_activePoints[i].IsPressed())
                     {
                         _activePoints[i].SetActive(false);
-                        _activePoints[i].SetPressing(false);
+                        _activePoints[i].SetPressingUp(false);
                         _activePoints[i].SetColour(Color.green);
                         _deactivatedPoints.Add(_activePoints[i]);
                         _activePoints.RemoveAt(i);

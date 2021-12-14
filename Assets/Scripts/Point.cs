@@ -9,6 +9,7 @@ public class Point : MonoBehaviour
     private bool switchedOn = false;
     private bool pressing = false;
     private static int totalPressing = 0;
+    private int touching = 0;
 
     public void Awake()
     {
@@ -35,12 +36,18 @@ public class Point : MonoBehaviour
         return pressing;
     }
 
-    public void SetPressing(bool value)
+    public void SetPressingUp(bool value)
     {
         pressing = value;
     }
 
     public void OnTriggerEnter2D(Collider2D other)
+    {
+        touching++;
+        SetPressingUp();
+    }
+
+    public void SetPressingUp()
     {
         if (switchedOn)
         {
@@ -49,13 +56,20 @@ public class Point : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit2D(Collider2D other)
+    public void SetPressingDown()
     {
         if (switchedOn)
         {
             totalPressing--;
             pressing = false;
         }
+    }
+    
+
+    public void OnTriggerExit2D(Collider2D other)
+    {
+        touching--;
+        SetPressingDown();
     }
 
     public static int Pressing()
@@ -66,6 +80,11 @@ public class Point : MonoBehaviour
     public static void ResetTotalPressing()
     {
         totalPressing = 0;
+    }
+
+    public int NumTouching()
+    {
+        return touching;
     }
 }
 
