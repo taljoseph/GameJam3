@@ -34,10 +34,10 @@ public class GManager : MonoBehaviour
             point.SetColour(Color.red);
             if (point.NumTouching() > 0)
             {
-                for (int j = 0; j < point.NumTouching(); j++)
-                {
-                    point.SetPressingUp();
-                }
+                Point.UpTotalPressing();
+                point.SetColour(Color.cyan);
+                //todo Change to call function that also takes care in case two buttons are being pressed
+                //todo should be the function SetPressingUp without the touching and switched on conditions
             }
         }
     }
@@ -61,29 +61,29 @@ public class GManager : MonoBehaviour
         print("Points pressed: " + Point.Pressing());
         if (_pointsAvailable)
         {
-            if (Point.Pressing() >= 2)
-            {
-                ApplyTimer();
-            }
-            else if (Point.Pressing() < 2 && _timePassed != 0)
-            {
-                _timePassed = 0;
-            }
-            if (_timePassed >= timeToDeactivate)
-            {
-                for (int i = _activePoints.Count - 1; i >= 0; i--)
-                {
-                    if (_activePoints[i].IsPressed())
-                    {
-                        _activePoints[i].SetActive(false);
-                        _activePoints[i].SetPressingUp(false);
-                        _activePoints[i].SetColour(Color.green);
-                        _deactivatedPoints.Add(_activePoints[i]);
-                        _activePoints.RemoveAt(i);
-                    }
-                    Point.ResetTotalPressing();
-                }
-            }
+            // if (Point.Pressing() >= 2)
+            // {
+            //     ApplyTimer();
+            // }
+            // else if (Point.Pressing() < 2 && _timePassed != 0)
+            // {
+            //     _timePassed = 0;
+            // }
+            // if (_timePassed >= timeToDeactivate)
+            // {
+            //     for (int i = _activePoints.Count - 1; i >= 0; i--)
+            //     {
+            //         if (_activePoints[i].IsPressed())
+            //         {
+            //             _activePoints[i].SetActive(false);
+            //             _activePoints[i].SetPressing(false);
+            //             _activePoints[i].SetColour(Color.green);
+            //             _deactivatedPoints.Add(_activePoints[i]);
+            //             _activePoints.RemoveAt(i);
+            //         }
+            //         Point.ResetTotalPressing();
+            //     }
+            // }
             if (_activePoints.Count == 0)
             {
                 DeactivatePoints();
