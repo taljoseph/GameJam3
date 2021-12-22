@@ -1,90 +1,127 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Point : MonoBehaviour
 {
-    private Color defaultColour;
-    private bool switchedOn = false;
-    private bool pressing = false;
-    private static int totalPressing = 0;
-    private int touching = 0;
-
+    
+    // private static bool _lastResort = false; // if there's only 1 active point
+    private Color _defaultColour;
+    private bool _switchedOn = false; // point active
+    private int _touching = 0; // point being touched, not necessarily active.
+    private bool _animActive = false;
+    private bool _inLevel = false;
+    [SerializeField] private GManager _gm;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private int id;
+    
     public void Awake()
     {
-        defaultColour = GetComponent<SpriteRenderer>().color;
+        _defaultColour = GetComponent<SpriteRenderer>().color;
+        // _animator.Play("timer");
     }
 
+    /// <summary>
+    /// Sets new colour
+    /// </summary>
+    /// <param name="newColour"> The colour to which we set the point to </param> 
     public void SetColour(Color newColour)
     {
         GetComponent<SpriteRenderer>().color = newColour;
     }
 
+    /// <summary>
+    /// Sets the active state of a point 
+    /// </summary>
+    /// <param name="value"></param>
     public void SetActive(bool value)
     {
-        switchedOn = value;
+        _switchedOn = value;
     }
 
+    /// <summary>
+    /// Checks if the point is active (active meaning turned on by the adversary, not necessarily pressed)
+    /// </summary>
+    /// <returns>true if active, false otherwise</returns>
     public bool IsOn()
     {
-        return switchedOn;
+        return _switchedOn;
     }
 
-    public bool IsPressed()
+
+    public bool AnimActive()
     {
-        return pressing;
+        return _animActive;
     }
 
-    public void SetPressingUp(bool value)
+    public Animator GetAnimator()
     {
-        pressing = value;
+        return _animator;
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        touching++;
-        SetPressingUp();
-    }
-
-    public void SetPressingUp()
-    {
-        if (switchedOn)
+        _touching++;
+        if (_switchedOn)
         {
-            totalPressing++;
-            pressing = true;
-        }
-    }
-
-    public void SetPressingDown()
-    {
-        if (switchedOn)
-        {
-            totalPressing--;
-            pressing = false;
+            if (_touching == 1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
+            {
+                _gm.AddPressing(this);
+            }
         }
     }
     
 
+    /// <summary>
+    /// Sets the pressing condition and decreases the total num of presses, given that the
+    /// point is active
+    /// </summary>
     public void OnTriggerExit2D(Collider2D other)
     {
-        touching--;
-        SetPressingDown();
+        _touching--; 
+        if (_switchedOn)
+        {
+            if (_animActive)
+            {
+                _gm.StopTimers();
+            }
+            
+            if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
+            {
+                _gm.RemovePressing(this);
+            }
+        }
     }
 
-    public static int Pressing()
-    {
-        return totalPressing;
-    }
 
-    public static void ResetTotalPressing()
-    {
-        totalPressing = 0;
-    }
-
+    /// <summary>
+    /// Returns the number of players touching this point, regardless of if active or not 
+    /// </summary>
+    /// <returns></returns>
     public int NumTouching()
     {
-        return touching;
+        return _touching;
+    }
+
+    public void SetAnimActive(bool val)
+    {
+        _animActive = val;
+    }
+
+    public bool IsInLevel()
+    {
+        return _inLevel;
+    }
+
+    public void SetInLevel(bool val)
+    {
+        _inLevel = val;
+    }
+
+    public int GetId()
+    {
+        return id;
     }
 }
-
