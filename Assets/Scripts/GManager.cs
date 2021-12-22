@@ -8,59 +8,153 @@ public class GManager : MonoBehaviour
 
     [SerializeField] private Transform points;
     [SerializeField] private float timeToDeactivate = 10f;
-    [SerializeField] private float addTime = 2; 
     private float _timePassed = 0;
+    [SerializeField] private float addTime = 2; 
     private bool _pointsAvailable = false;
-    private List<Point> _activePoints;
-    private List<Point> _deactivatedPoints;
+    private List<Point> _levelPoints;
     private int _curBatch = 0;
-    
-    void Start()
+    private List<Point> _currPressing  = new List<Point>();
+    private int _activePointsCounter = 0;
+    [SerializeField] private List<PointListL> pointsNeighbours;
+
+    public void AddPressing(Point p)
     {
-        _activePoints = new List<Point>();
-        _deactivatedPoints = new List<Point>();
-        ActivatePoints(points.GetChild(_curBatch));
-        _curBatch = (_curBatch + 1) % points.childCount;
-        _pointsAvailable = true;
+        _currPressing.Add(p);
+        p.SetColour(Color.cyan);
+        if (_currPressing.Count >= 2)
+        {
+            foreach (var point in _currPressing)
+            {
+                point.SetAnimActive(true);
+                point.GetAnimator().Play("timer");
+            }
+            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            {
+                for (int i = 0; i < cur.Count; i++)
+                {
+                    if (cur[i].IsInLevel())
+                    {
+                        cur[i].SetColour(Color.cyan);
+                    }
+                }
+            }
+            
+            
+        } 
     }
 
-    private void ActivatePoints(Transform level)
+    public void RemovePressing(Point p)
     {
-        for (int i = 0; i < level.transform.childCount; i++)
+        _currPressing.Remove(p);
+        p.SetColour(Color.red);
+    }
+
+    public void StopTimers()
+    {
+        foreach (var point in _currPressing)
         {
-            var point = level.GetChild(i).GetComponent<Point>();
-            _activePoints.Add(point);
-            point.SetActive(true);
-            point.SetColour(Color.red);
-            if (point.NumTouching() > 0)
+            point.GetAnimator().Rebind();
+            // point.SetColour(Color.cyan);
+        }
+
+        if (_currPressing.Count >= 2)
+        {
+            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
             {
-                Point.UpTotalPressing();
-                point.SetColour(Color.cyan);
-                //todo Change to call function that also takes care in case two buttons are being pressed
-                //todo should be the function SetPressingUp without the touching and switched on conditions
+                for (int i = 0; i < cur.Count; i++)
+                {
+                    if (cur[i].IsInLevel() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
+                    {
+                        cur[i].SetColour(Color.red);
+                    }
+                }
             }
         }
     }
+    /// <summary>
+    /// Called when the clock finished its loop
+    /// </summary>
+    /// <param name="point"></param>
+    public void PointSuccess(Point point)
+    {
+        point.GetAnimator().Play("New State");
+        if (_currPressing.Count >= 2)
+        {
+            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            {
+                for (int i = 0; i < cur.Count; i++)
+                {
+                    if (cur[i].IsInLevel())
+                    {
+                        cur[i].SetColour(Color.green);
+                        cur[i].SetActive(false);                    
+                    }
+                }
+            }
+            _activePointsCounter -= cur.Count;
+        }
+        _currPressing.Clear();
+    }
+    
+    
+    void Start()
+    {
+        _levelPoints = new List<Point>();
+        InitPoints(0);
+        _curBatch = (_curBatch + 1) % points.childCount;
+    }
 
-    private void DeactivatePoints()
+    private void InitPoints(int round)
+    {
+        for (int j = 0; j < round + 1; j++)
+        {
+            var curCircle = points.GetChild(j);
+            for (int i = 0; i < curCircle.childCount; i++)
+            {
+                var point = curCircle.GetChild(i).GetComponent<Point>();
+                _levelPoints.Add(point);
+                point.SetActive(true);
+                point.SetColour(Color.red);
+                point.SetInLevel(true);
+                if (point.NumTouching() > 0 && point.NumTouching() != 2)
+                {
+                    AddPressing(point);
+                }
+            }
+        }
+        _pointsAvailable = true;
+        _activePointsCounter = _levelPoints.Count;
+    }
+
+    private void LevelPointsReset()
     {
         _timePassed = 0;
-        foreach (var point in _deactivatedPoints)
+        foreach (var point in _levelPoints)
         {
             point.SetColour(Color.white);
-            point.SetActive(false);
+            point.SetInLevel(false);
         }
-        _deactivatedPoints.Clear();
+        _levelPoints.Clear();
     }
     
     
 
     void Update()
     {
-        print("Time Passed: " + _timePassed);
-        print("Points pressed: " + Point.Pressing());
         if (_pointsAvailable)
         {
+            // if (Point.Pressing() >= 2)
+            // {
+            //     List<Point> nowOn = new List<Point>();
+            //     foreach (var point in _activePoints)
+            //     {
+            //         if (point.NumTouching() >= 1)
+            //         {
+            //             nowOn.Add(point);
+            //         }
+            //     }
+            // }
+            
             // if (Point.Pressing() >= 2)
             // {
             //     ApplyTimer();
@@ -84,9 +178,9 @@ public class GManager : MonoBehaviour
             //         Point.ResetTotalPressing();
             //     }
             // }
-            if (_activePoints.Count == 0)
+            if (_activePointsCounter <= 0)
             {
-                DeactivatePoints();
+                LevelPointsReset();
                 _pointsAvailable = false;
                 StartCoroutine(StartNextBatch());
             }
@@ -95,7 +189,6 @@ public class GManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("SampleScene");
-            Point.ResetTotalPressing();
         }
         
         
@@ -104,13 +197,25 @@ public class GManager : MonoBehaviour
     private IEnumerator StartNextBatch()
     {
         yield return new WaitForSeconds(5);
-        ActivatePoints(points.GetChild(_curBatch));
+        InitPoints(_curBatch);
         _curBatch = (_curBatch + 1) % points.childCount;
-        _pointsAvailable = true;
     }
 
     private void ApplyTimer()
     {
         _timePassed += Time.deltaTime * addTime;
     }
+}
+
+
+[System.Serializable]
+public class PointList
+{
+    public List<Point> list;
+}
+
+[System.Serializable]
+public class PointListL
+{
+    public List<PointList> list;
 }

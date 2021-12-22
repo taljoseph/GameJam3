@@ -1,21 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Point : MonoBehaviour
 {
-    private Color defaultColour;
+    
+    // private static bool _lastResort = false; // if there's only 1 active point
+    private Color _defaultColour;
     private bool _switchedOn = false; // point active
-    // private bool pressing = false; // point being pressed
-    private static int _totalPressing = 0; 
     private int _touching = 0; // point being touched, not necessarily active.
-    private static bool _lastResort = false; // if there's only 1 active point
-    [SerializeField] private List<List<Point>> _neighbours = new List<List<Point>>();
-
+    private bool _animActive = false;
+    private bool _inLevel = false;
+    [SerializeField] private GManager _gm;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private int id;
+    
     public void Awake()
     {
-        defaultColour = GetComponent<SpriteRenderer>().color;
+        _defaultColour = GetComponent<SpriteRenderer>().color;
+        // _animator.Play("timer");
     }
 
     /// <summary>
@@ -37,7 +42,7 @@ public class Point : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if the point is active
+    /// Checks if the point is active (active meaning turned on by the adversary, not necessarily pressed)
     /// </summary>
     /// <returns>true if active, false otherwise</returns>
     public bool IsOn()
@@ -45,92 +50,53 @@ public class Point : MonoBehaviour
         return _switchedOn;
     }
 
-    // /// <summary>
-    // /// Check is this point is being pressed. Can be true only if point is active
-    // /// </summary>
-    // /// <returns>True if it's being pressed, false otherwise</returns>
-    // public bool IsPressed()
-    // {
-    //     return pressing;
-    // }
 
-    // /// <summary>
-    // /// Sets the current status of pressing
-    // /// </summary>
-    // /// <param name="value"></param>
-    // public void SetPressing(bool value)
-    // {
-    //     pressing = value;
-    // }
+    public bool AnimActive()
+    {
+        return _animActive;
+    }
+
+    public Animator GetAnimator()
+    {
+        return _animator;
+    }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
         _touching++;
-        SetPressingUp();
-    }
-
-    /// <summary>
-    /// Sets the pressing condition and increases the total num of presses, given that the
-    /// point is active
-    /// </summary>
-    public void SetPressingUp()
-    {
         if (_switchedOn)
         {
             if (_touching == 1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
             {
-                _totalPressing++;
-                SetColour(Color.cyan);
+                _gm.AddPressing(this);
             }
-            // pressing = true;
         }
     }
+    
 
     /// <summary>
     /// Sets the pressing condition and decreases the total num of presses, given that the
     /// point is active
     /// </summary>
-    public void SetPressingDown()
-    {
-        if (_switchedOn)
-        {
-            if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
-            {
-                _totalPressing--;
-                SetColour(Color.red);
-            }
-            // pressing = false;
-        }
-    }
-    
+
 
     public void OnTriggerExit2D(Collider2D other)
     {
-        _touching--;
-        SetPressingDown();
+        _touching--; 
+        if (_switchedOn)
+        {
+            if (_animActive)
+            {
+                _gm.StopTimers();
+            }
+            
+            if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
+            {
+                _gm.RemovePressing(this);
+            }
+        }
     }
 
-    /// <summary>
-    /// Returns the total number of points being pressed
-    /// </summary>
-    /// <returns></returns>
-    public static int Pressing()
-    {
-        return _totalPressing;
-    }
-
-    /// <summary>
-    /// Resets the total points being pressed
-    /// </summary>
-    public static void ResetTotalPressing()
-    {
-        _totalPressing = 0;
-    }
-
-    public static void UpTotalPressing()
-    {
-        _totalPressing++;
-    }
 
     /// <summary>
     /// Returns the number of players touching this point, regardless of if active or not 
@@ -140,5 +106,24 @@ public class Point : MonoBehaviour
     {
         return _touching;
     }
-}
 
+    public void SetAnimActive(bool val)
+    {
+        _animActive = val;
+    }
+
+    public bool IsInLevel()
+    {
+        return _inLevel;
+    }
+
+    public void SetInLevel(bool val)
+    {
+        _inLevel = val;
+    }
+
+    public int GetId()
+    {
+        return id;
+    }
+}
