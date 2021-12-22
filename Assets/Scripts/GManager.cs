@@ -26,13 +26,15 @@ public class GManager : MonoBehaviour
             foreach (var point in _currPressing)
             {
                 point.SetAnimActive(true);
-                point.GetAnimator().Play("timer");
+                var an = point.GetAnimator();
+                an.GetComponent<SpriteRenderer>().enabled = true;
+                an.Play("timer");
             }
             var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
             {
                 for (int i = 0; i < cur.Count; i++)
                 {
-                    if (cur[i].IsInLevel())
+                    if (cur[i].IsInLevel() && cur[i].IsOn())
                     {
                         cur[i].SetColour(Color.cyan);
                     }
@@ -53,7 +55,10 @@ public class GManager : MonoBehaviour
     {
         foreach (var point in _currPressing)
         {
-            point.GetAnimator().Rebind();
+            var an = point.GetAnimator();
+            an.Rebind();
+            an.GetComponent<SpriteRenderer>().enabled = false;
+
             // point.SetColour(Color.cyan);
         }
 
@@ -63,7 +68,7 @@ public class GManager : MonoBehaviour
             {
                 for (int i = 0; i < cur.Count; i++)
                 {
-                    if (cur[i].IsInLevel() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
+                    if (cur[i].IsInLevel() && cur[i].IsOn() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
                     {
                         cur[i].SetColour(Color.red);
                     }
@@ -77,21 +82,24 @@ public class GManager : MonoBehaviour
     /// <param name="point"></param>
     public void PointSuccess(Point point)
     {
-        point.GetAnimator().Play("New State");
+        var an = point.GetAnimator();
+        an.Rebind();
+        an.GetComponent<SpriteRenderer>().enabled = false;
+        point.SetAnimActive(false);
         if (_currPressing.Count >= 2)
         {
             var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
             {
                 for (int i = 0; i < cur.Count; i++)
                 {
-                    if (cur[i].IsInLevel())
+                    if (cur[i].IsInLevel() && cur[i].IsOn())
                     {
                         cur[i].SetColour(Color.green);
-                        cur[i].SetActive(false);                    
+                        cur[i].SetActive(false); 
+                        _activePointsCounter--;
                     }
                 }
             }
-            _activePointsCounter -= cur.Count;
         }
         _currPressing.Clear();
     }
@@ -106,6 +114,7 @@ public class GManager : MonoBehaviour
 
     private void InitPoints(int round)
     {
+        var temp = new List<Point>();
         for (int j = 0; j < round + 1; j++)
         {
             var curCircle = points.GetChild(j);
@@ -118,9 +127,13 @@ public class GManager : MonoBehaviour
                 point.SetInLevel(true);
                 if (point.NumTouching() > 0 && point.NumTouching() != 2)
                 {
-                    AddPressing(point);
+                    temp.Add(point);
                 }
             }
+        }
+        foreach (var p in temp)
+        {
+            AddPressing(p);
         }
         _pointsAvailable = true;
         _activePointsCounter = _levelPoints.Count;
@@ -137,8 +150,6 @@ public class GManager : MonoBehaviour
         _levelPoints.Clear();
     }
     
-    
-
     void Update()
     {
         if (_pointsAvailable)

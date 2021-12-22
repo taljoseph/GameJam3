@@ -78,8 +78,6 @@ public class Point : MonoBehaviour
     /// Sets the pressing condition and decreases the total num of presses, given that the
     /// point is active
     /// </summary>
-
-
     public void OnTriggerExit2D(Collider2D other)
     {
         _touching--; 
