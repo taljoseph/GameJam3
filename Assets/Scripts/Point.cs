@@ -6,17 +6,17 @@ using UnityEngine;
 
 public class Point : MonoBehaviour
 {
-    
     // private static bool _lastResort = false; // if there's only 1 active point
     private Color _defaultColour;
     private bool _switchedOn = false; // point active
     private int _touching = 0; // point being touched, not necessarily active.
+    private int _minionTouching = 0; // point being touched, not necessarily active.
     private bool _animActive = false;
     private bool _inLevel = false;
     [SerializeField] private GManager _gm;
     [SerializeField] private Animator _animator;
-    [SerializeField] private int id;
-    
+    public int id;
+
     public void Awake()
     {
         _defaultColour = GetComponent<SpriteRenderer>().color;
@@ -63,16 +63,35 @@ public class Point : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        _touching++;
-        if (_switchedOn)
+        if (other.gameObject.tag.Equals("Player"))
         {
-            if (_touching == 1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
+            _touching++;
+            if (_switchedOn)
             {
-                _gm.AddPressing(this);
+                if (_touching == 1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
+                {
+                    _gm.AddPressing(this);
+                }
+            }
+        }
+        else if (other.gameObject.tag.Equals("Minion"))
+        {
+            Minion minion = other.gameObject.GetComponent<Minion>();
+            if (id == minion.target.id)
+            {
+                _minionTouching++;
+                if (!_switchedOn)
+                {
+                    if (_minionTouching == 1)
+                    {
+                        _gm.AddMinionPressing(this);
+                    }
+                }
+                
             }
         }
     }
-    
+
 
     /// <summary>
     /// Sets the pressing condition and decreases the total num of presses, given that the
@@ -80,20 +99,43 @@ public class Point : MonoBehaviour
     /// </summary>
     public void OnTriggerExit2D(Collider2D other)
     {
-        _touching--; 
-        if (_switchedOn)
+        if (other.gameObject.tag.Equals("Player"))
         {
-            if (_animActive)
+            _touching--;
+            if (_switchedOn)
             {
-                _gm.StopTimers();
-            }
-            
-            if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
-            {
-                _gm.RemovePressing(this);
-            }
+                if (_animActive)
+                {
+                    _gm.StopTimers();
+                }
+
+                if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
+                {
+                    _gm.RemovePressing(this);
+                }
+            }            
         }
+        else if (other.gameObject.tag.Equals("Minion"))
+        {
+            Minion minion = other.gameObject.GetComponent<Minion>();
+            if (id == minion.target.id)
+            {
+                Debug.Log("Point 123");
+                _minionTouching--;
+                if (_minionTouching == 0)
+                {
+                    _gm.RemoveMinionPressing(this);
+                }                
+            }
+
+        }
+
     }
+
+    public void MinionLeft()
+    {
+        _minionTouching--;
+    } 
 
 
     /// <summary>

@@ -21,10 +21,6 @@ public class Bullet : MonoBehaviour
 
     public void SetVelocityDirection(Vector3 direction)
     {
-        if (rb == null)
-        {
-            Debug.Log("it is null");
-        }
         rb.velocity = direction * 5;
     }
     
@@ -34,13 +30,17 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (col.gameObject.tag.Equals("Player1"))
+
+        if (col.gameObject.tag.Equals("Player"))
         {
-            Destroy(gameObject);
-        }
-        if (col.gameObject.tag.Equals("Player2"))
-        {
-            Destroy(gameObject);
+            //StartCoroutine(Wait());
+            Destroy(gameObject, 0.3f);
         }
     }
+    
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1.5f);
+    }
+
 }
