@@ -7,14 +7,15 @@ using UnityEngine;
 public class Point : MonoBehaviour
 {
     // private static bool _lastResort = false; // if there's only 1 active point
-    private Color _defaultColour;
-    private bool _switchedOn = false; // point active
-    private int _touching = 0; // point being touched, not necessarily active.
-    private int _minionTouching = 0; // point being touched, not necessarily active.
-    private bool _animActive = false;
-    private bool _inLevel = false;
+    [SerializeField] private Color _defaultColour;
+    [SerializeField] private bool _isSatanPoint = false; // point active
+    [SerializeField] private int _playerTouching = 0; // point being touched, not necessarily active.
+    [SerializeField] private int _minionTouching = 0; // point being touched, not necessarily active.
+    [SerializeField] private bool _animActive = false;
+    [SerializeField] private bool _inLevel = false;
     [SerializeField] private GManager _gm;
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Animator _minionAnimator;
     public int id;
 
     public void Awake()
@@ -38,16 +39,16 @@ public class Point : MonoBehaviour
     /// <param name="value"></param>
     public void SetActive(bool value)
     {
-        _switchedOn = value;
+        _isSatanPoint = value;
     }
 
     /// <summary>
     /// Checks if the point is active (active meaning turned on by the adversary, not necessarily pressed)
     /// </summary>
     /// <returns>true if active, false otherwise</returns>
-    public bool IsOn()
+    public bool IsSatanPoint()
     {
-        return _switchedOn;
+        return _isSatanPoint;
     }
 
 
@@ -56,19 +57,25 @@ public class Point : MonoBehaviour
         return _animActive;
     }
 
-    public Animator GetAnimator()
+    public Animator GetPlayerAnimator()
     {
-        return _animator;
+        return _playerAnimator;
+    }
+
+    public Animator GetMinionAnimator()
+    {
+        return _minionAnimator;
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-            _touching++;
-            if (_switchedOn)
+            _playerTouching++;
+            if (_isSatanPoint)
             {
-                if (_touching == 1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
+                if (_playerTouching ==
+                    1) // if 2 touching then only one button is pressed, so total pressing shouldn't +1
                 {
                     _gm.AddPressing(this);
                 }
@@ -77,18 +84,19 @@ public class Point : MonoBehaviour
         else if (other.gameObject.tag.Equals("Minion"))
         {
             Minion minion = other.gameObject.GetComponent<Minion>();
-            if (id == minion.target.id)
+            _minionTouching++;
+            if (!_isSatanPoint && id == minion.target.id && minion.IsFinalTargetSet())
             {
-                _minionTouching++;
-                if (!_switchedOn)
+                if (_minionTouching == 1)
                 {
-                    if (_minionTouching == 1)
-                    {
-                        _gm.AddMinionPressing(this);
-                    }
+                    _gm.AddMinionPressing(this);
                 }
-                
             }
+        }
+        else if (other.gameObject.tag.Equals("PointsActivator"))
+        {
+            PointsActivator pointsActivator = other.gameObject.GetComponent<PointsActivator>();
+            pointsActivator.HandlePointCollision(this);
         }
     }
 
@@ -101,50 +109,54 @@ public class Point : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-            _touching--;
-            if (_switchedOn)
+            _playerTouching--;
+            if (_isSatanPoint)
             {
                 if (_animActive)
                 {
-                    _gm.StopTimers();
+                    _gm.StopPlayerTimers();
                 }
 
-                if (_touching == 0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
+                if (_playerTouching ==
+                    0) // if 1 is touching then the button is still being pressed, so total shouldn't -1
                 {
                     _gm.RemovePressing(this);
                 }
-            }            
+            }
         }
         else if (other.gameObject.tag.Equals("Minion"))
         {
             Minion minion = other.gameObject.GetComponent<Minion>();
-            if (id == minion.target.id)
+
+            _minionTouching--;
+            if (id == minion.target.id && minion.IsFinalTargetSet())
             {
-                Debug.Log("Point 123");
-                _minionTouching--;
+                if (_animActive)
+                {
+                    _gm.StopMinionTimers();
+                }
+
                 if (_minionTouching == 0)
                 {
                     _gm.RemoveMinionPressing(this);
-                }                
+                }
             }
-
         }
-
     }
 
     public void MinionLeft()
     {
         _minionTouching--;
-    } 
+    }
 
 
     /// <summary>
     /// Returns the number of players touching this point, regardless of if active or not 
     /// </summary>
     /// <returns></returns>
-    public int NumTouching()
+    public int NumPlayersTouching()
     {
-        return _touching;
+        return _playerTouching;
     }
 
     public void SetAnimActive(bool val)
@@ -165,5 +177,18 @@ public class Point : MonoBehaviour
     public int GetId()
     {
         return id;
+    }
+
+    public void RestorePointColor()
+    {
+        Debug.Log("restoring color");
+        if (_isSatanPoint)
+        {
+            SetColour(Color.red);
+        }
+        else
+        {
+            SetColour(Color.green);
+        }
     }
 }

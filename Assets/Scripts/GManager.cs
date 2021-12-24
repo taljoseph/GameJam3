@@ -7,7 +7,8 @@ public class GManager : MonoBehaviour
 {
     [SerializeField] private Transform points;
     [SerializeField] private float timeToDeactivate = 10f;
-    
+    public GameObject activatorPref;
+
     private float _timePassed = 0;
     [SerializeField] private float addTime = 2;
     public MainEnemy satan;
@@ -15,15 +16,15 @@ public class GManager : MonoBehaviour
     private List<Point> _levelPoints;
     private List<Point> _playerLevelPoints;
     private int _curBatch = 0;
-    private List<Point> _currPressing = new List<Point>();
-    private List<Point> _currMinionPressing = new List<Point>();
-    private int _activePointsCounter = 0;
+    [SerializeField] private List<Point> _currPressing = new List<Point>();
+    [SerializeField] private List<Point> _currMinionPressing = new List<Point>();
+    [SerializeField] private int _satanPointsCounter = 0;
 
     [SerializeField] private List<PointListL> pointsNeighbours;
 
     public List<Point> GetRandomTargets()
     {
-        var numOfInactivePoints = _levelPoints.Count - _activePointsCounter;
+        var numOfInactivePoints = _levelPoints.Count - _satanPointsCounter;
         if (numOfInactivePoints < 2)
         {
             return null;
@@ -38,9 +39,18 @@ public class GManager : MonoBehaviour
 
         var p1 = _playerLevelPoints[ind1];
         var p2 = _playerLevelPoints[ind2];
-        //Debug.Log("Point 1 position: " + p1.transform.position);
-        //Debug.Log("Point 2 position: " + p2.transform.position);
         return new List<Point>() {p1, p2};
+    }
+
+    public void ShootActivator(Point source, Point dest, Possessor possessor, ActivatorGoal goal)
+    {
+        var activator = Instantiate(activatorPref, source.transform.position, Quaternion.identity);
+        var activatorScript = activator.GetComponent<PointsActivator>();
+        activatorScript.SetSource(source);
+        activatorScript.SetDestination(dest);
+        activatorScript.SetGoal(goal);
+        activatorScript.SetPossessor(possessor);
+        activatorScript.SetLayer(possessor == Possessor.Player ? 3 : 7);
     }
 
 
@@ -53,72 +63,90 @@ public class GManager : MonoBehaviour
             foreach (var point in _currPressing)
             {
                 point.SetAnimActive(true);
-                var an = point.GetAnimator();
+                var an = point.GetPlayerAnimator();
                 an.GetComponent<SpriteRenderer>().enabled = true;
                 an.Play("timer");
             }
 
-            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            {
-                for (int i = 0; i < cur.Count; i++)
-                {
-                    if (cur[i].IsInLevel() && cur[i].IsOn())
-                    {
-                        cur[i].SetColour(Color.cyan);
-                        
-                    }
-                }
-            }
+            ShootActivator(p, _currPressing[0], Possessor.Player, ActivatorGoal.StartCapture);
+            ShootActivator(_currPressing[0], p, Possessor.Player, ActivatorGoal.StartCapture);
+            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            // {
+            //     for (int i = 0; i < cur.Count; i++)
+            //     {
+            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
+            //         {
+            //             cur[i].SetColour(Color.cyan);
+            //             
+            //         }
+            //     }
+            // }
         }
     }
-    
-    
+
+
     public void AddMinionPressing(Point p)
     {
-
+        //Debug.Log("minion pressing!");
         _currMinionPressing.Add(p);
-        //p.SetColour(Color.cyan);
+        p.SetColour(Color.yellow);
         if (_currMinionPressing.Count >= 2)
         {
-            var cur = pointsNeighbours[_currMinionPressing[0].GetId()].list[_currMinionPressing[1].GetId()].list;
+            foreach (var point in _currMinionPressing)
             {
-                satan.DestroyMinions();
-                //Debug.Log();
-                RemoveMinionPressing(_currMinionPressing[0]);
-                RemoveMinionPressing(_currMinionPressing[1]);
-                _currMinionPressing.Clear();
-                for (int i = 0; i < cur.Count; i++)
-                {
-                    if (cur[i].IsInLevel() && !cur[i].IsOn())
-                    {
-                        cur[i].SetColour(Color.red);
-                        cur[i].SetActive(true);
-                        _activePointsCounter++;
-                        _playerLevelPoints.Remove(cur[i]);
-                    }
-                }
+                point.SetAnimActive(true);
+                var an = point.GetMinionAnimator();
+                an.GetComponent<SpriteRenderer>().enabled = true;
+                an.Play("timer");
             }
+
+            ShootActivator(p, _currMinionPressing[0], Possessor.Satan, ActivatorGoal.StartCapture);
+            ShootActivator(_currMinionPressing[0], p, Possessor.Satan, ActivatorGoal.StartCapture);
         }
+
+        // _currMinionPressing.Add(p);
+        // //p.SetColour(Color.cyan);
+        // if (_currMinionPressing.Count >= 2)
+        // {
+        //     var cur = pointsNeighbours[_currMinionPressing[0].GetId()].list[_currMinionPressing[1].GetId()].list;
+        //     {
+        //         satan.DestroyMinions();
+        //
+        //         RemoveMinionPressing(_currMinionPressing[0]);
+        //         RemoveMinionPressing(_currMinionPressing[1]);
+        //         _currMinionPressing.Clear();
+        //         for (int i = 0; i < cur.Count; i++)
+        //         {
+        //             if (cur[i].IsInLevel() && !cur[i].IsSatanPoint())
+        //             {
+        //                 cur[i].SetColour(Color.red);
+        //                 cur[i].SetActive(true);
+        //                 _satanPointsCounter++;
+        //                 _playerLevelPoints.Remove(cur[i]);
+        //             }
+        //         }
+        //     }
+        // }
     }
-    
-    
+
 
     public void RemovePressing(Point p)
     {
         _currPressing.Remove(p);
         p.SetColour(Color.red);
     }
-    
+
     public void RemoveMinionPressing(Point p)
     {
         p.MinionLeft();
     }
 
-    public void StopTimers()
+    public void StopPlayerTimers()
     {
         foreach (var point in _currPressing)
         {
-            var an = point.GetAnimator();
+            //Debug.Log("stopping animation");
+            var an = point.GetPlayerAnimator();
             an.Rebind();
             an.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -127,47 +155,145 @@ public class GManager : MonoBehaviour
 
         if (_currPressing.Count >= 2)
         {
-            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            {
-                for (int i = 0; i < cur.Count; i++)
-                {
-                    if (cur[i].IsInLevel() && cur[i].IsOn() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
-                    {
-                        cur[i].SetColour(Color.red);
-                    }
-                }
-            }
+            ShootActivator(_currPressing[1], _currPressing[0], Possessor.Player, ActivatorGoal.StopCapture);
+            ShootActivator(_currPressing[0], _currPressing[1], Possessor.Player, ActivatorGoal.StopCapture);
+            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            // {
+            //     for (int i = 0; i < cur.Count; i++)
+            //     {
+            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
+            //         {
+            //             cur[i].SetColour(Color.red);
+            //         }
+            //     }
+            // }
         }
     }
 
+    public void StopMinionTimers()
+    {
+        foreach (var point in _currMinionPressing)
+        {
+            var an = point.GetMinionAnimator();
+            an.Rebind();
+            an.GetComponent<SpriteRenderer>().enabled = false;
+
+            // point.SetColour(Color.cyan);
+        }
+
+        if (_currMinionPressing.Count >= 2)
+        {
+            ShootActivator(_currMinionPressing[1], _currMinionPressing[0], Possessor.Satan, ActivatorGoal.StopCapture);
+            ShootActivator(_currMinionPressing[0], _currMinionPressing[1], Possessor.Satan, ActivatorGoal.StopCapture);
+            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            // {
+            //     for (int i = 0; i < cur.Count; i++)
+            //     {
+            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
+            //         {
+            //             cur[i].SetColour(Color.red);
+            //         }
+            //     }
+            // }
+        }
+    }
+
+    
+    
+    
     /// <summary>
-    /// Called when the clock finished its loop
+    /// Called when the clock finished its -
     /// </summary>
     /// <param name="point"></param>
-    public void PointSuccess(Point point)
+    public void PlayerPointSuccess(Point point)
     {
-        var an = point.GetAnimator();
+        var an = point.GetPlayerAnimator();
         an.Rebind();
         an.GetComponent<SpriteRenderer>().enabled = false;
         point.SetAnimActive(false);
+        //Debug.Log("curr Pressing count: " + _currPressing.Count);
         if (_currPressing.Count >= 2)
         {
-            var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            {
-                for (int i = 0; i < cur.Count; i++)
-                {
-                    if (cur[i].IsInLevel() && cur[i].IsOn())
-                    {
-                        cur[i].SetColour(Color.green);
-                        cur[i].SetActive(false);
-                        _activePointsCounter--;
-                        _playerLevelPoints.Add(cur[i]);
-                    }
-                }
-            }
+            ShootActivator(_currPressing[1], _currPressing[0], Possessor.Player, ActivatorGoal.CompleteCapture);
+            ShootActivator(_currPressing[0], _currPressing[1], Possessor.Player, ActivatorGoal.CompleteCapture);
+            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            // {
+            //     for (int i = 0; i < cur.Count; i++)
+            //     {
+            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
+            //         {
+            //             cur[i].SetColour(Color.green);
+            //             cur[i].SetActive(false);
+            //             _satanPointsCounter--;
+            //             _playerLevelPoints.Add(cur[i]);
+            //         }
+            //     }
+            // }
         }
 
         _currPressing.Clear();
+    }
+
+    public void MinionGotHit()
+    {
+        foreach (var point in _currMinionPressing)
+        { 
+            point.RestorePointColor();
+        }
+        StopMinionTimers();
+        satan.DestroyMinions();
+        foreach (var point in _currMinionPressing)
+        {
+            RemoveMinionPressing(point); 
+            
+        }
+        _currMinionPressing.Clear();
+    }
+    
+    public void MinionPointSuccess(Point point)
+    {
+        var an = point.GetMinionAnimator();
+        an.Rebind();
+        an.GetComponent<SpriteRenderer>().enabled = false;
+        point.SetAnimActive(false);
+        if (_currMinionPressing.Count >= 2)
+        {
+            ShootActivator(_currMinionPressing[1], _currMinionPressing[0], Possessor.Satan, ActivatorGoal.CompleteCapture);
+            ShootActivator(_currMinionPressing[0], _currMinionPressing[1], Possessor.Satan, ActivatorGoal.CompleteCapture);
+            satan.DestroyMinions();
+            RemoveMinionPressing(_currMinionPressing[0]);
+            RemoveMinionPressing(_currMinionPressing[1]);
+            _currMinionPressing.Clear();
+            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
+            // {
+            //     for (int i = 0; i < cur.Count; i++)
+            //     {
+            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
+            //         {
+            //             cur[i].SetColour(Color.green);
+            //             cur[i].SetActive(false);
+            //             _satanPointsCounter--;
+            //             _playerLevelPoints.Add(cur[i]);
+            //         }
+            //     }
+            // }
+        }
+
+        _currMinionPressing.Clear();
+    }
+    
+    
+
+    public void AddToPlayerPoints(Point p)
+    {
+        _satanPointsCounter--;
+        _playerLevelPoints.Add(p);
+    }
+
+    public void RemoveFromPlayerPoints(Point p)
+    {
+        _satanPointsCounter++;
+        _playerLevelPoints.Remove(p);
     }
 
 
@@ -175,13 +301,12 @@ public class GManager : MonoBehaviour
     {
         _levelPoints = new List<Point>();
         _playerLevelPoints = new List<Point>();
-        InitPoints(0);
+        InitPoints(2);
         _curBatch = (_curBatch + 1) % points.childCount;
     }
 
     private void InitPoints(int round)
     {
-
         var temp = new List<Point>();
         for (int j = 0; j < round + 1; j++)
         {
@@ -193,11 +318,12 @@ public class GManager : MonoBehaviour
                 point.SetActive(true);
                 point.SetColour(Color.red);
                 point.SetInLevel(true);
-                if (point.NumTouching() > 0 && point.NumTouching() != 2)
+                if (point.NumPlayersTouching() > 0 && point.NumPlayersTouching() != 2)
                 {
                     temp.Add(point);
                 }
             }
+
             _playerLevelPoints = new List<Point>();
         }
 
@@ -207,7 +333,7 @@ public class GManager : MonoBehaviour
         }
 
         _pointsAvailable = true;
-        _activePointsCounter = _levelPoints.Count;
+        _satanPointsCounter = _levelPoints.Count;
     }
 
     private void LevelPointsReset()
@@ -261,7 +387,7 @@ public class GManager : MonoBehaviour
             //         Point.ResetTotalPressing();
             //     }
             // }
-            if (_activePointsCounter <= 0)
+            if (_satanPointsCounter <= 0)
             {
                 LevelPointsReset();
                 _pointsAvailable = false;

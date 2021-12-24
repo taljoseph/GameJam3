@@ -22,7 +22,7 @@ public class MainEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(SimpleShot());
+        StartCoroutine(SimpleShot());
         StartCoroutine(SendMinions());
     }
 
@@ -65,13 +65,13 @@ public class MainEnemy : MonoBehaviour
 
     public void DestroyMinions()
     {
-        if (_minions.Count >= 1 && _minions[0] != null)
-        {
-            Destroy(_minions[0].gameObject, 0.5f);
-        }
         if (_minions.Count >= 2 && _minions[1] != null)
         {
-            Destroy(_minions[1].gameObject, 0.5f);
+            Destroy(_minions[1].gameObject, 0.1f);
+        }
+        if (_minions.Count >= 1 && _minions[0] != null)
+        {
+            Destroy(_minions[0].gameObject, 0.1f);
         }
         _minions.Clear();
         _areMinionsActive = false;

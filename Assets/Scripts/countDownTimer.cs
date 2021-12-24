@@ -11,8 +11,7 @@ public class countDownTimer : MonoBehaviour
     private float curTime = 0f;
     private bool flag = true;
     private GManager gameManagerScript;
-    public AudioSource audioSource;
-    public AudioClip tenSecSound;
+   
 
     private void Start()
     {

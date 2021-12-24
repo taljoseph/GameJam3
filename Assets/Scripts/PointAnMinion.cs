@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointAn : MonoBehaviour
+public class PointAnMinion : MonoBehaviour
 {
     [SerializeField] private Point point;
     [SerializeField] private GManager _gm;
@@ -15,7 +15,7 @@ public class PointAn : MonoBehaviour
 
     private void PointDeactivate()
     {
-        Debug.Log("should call point success");
-        _gm.PlayerPointSuccess(point);
+        //Debug.Log("should call point minion success");
+        _gm.MinionPointSuccess(point);
     }
 }

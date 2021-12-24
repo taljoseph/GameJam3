@@ -7,17 +7,20 @@ TagManager:
   - Border
   - Player1
   - Player2
+  - Minion
+  - PointsActivator
+  - Point
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PointsActivator
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Points
+  - PointsActivatorMinions
+  - Minion
+  - Bullet
   - 
   - 
   - 
