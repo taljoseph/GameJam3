@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Point : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class Point : MonoBehaviour
     [SerializeField] private Color _defaultColour;
     [SerializeField] private bool _isSatanPoint = false; // point active
     [SerializeField] private int _playerTouching = 0; // point being touched, not necessarily active.
-    [SerializeField] private int _minionTouching = 0; // point being touched, not necessarily active.
-    [SerializeField] private bool _animActive = false;
+    // [SerializeField] private int _minionTouching = 0; // point being touched, not necessarily active. TODO redundant 
+    [FormerlySerializedAs("_animActive")] [SerializeField] private bool _animActivePlayer = false;
+    [SerializeField] private bool _animActiveMinion = false;
     [SerializeField] private bool _inLevel = false;
     [SerializeField] private GManager _gm;
     [SerializeField] private Animator _playerAnimator;
@@ -54,7 +56,7 @@ public class Point : MonoBehaviour
 
     public bool AnimActive()
     {
-        return _animActive;
+        return _animActivePlayer;
     }
 
     public Animator GetPlayerAnimator()
@@ -84,19 +86,23 @@ public class Point : MonoBehaviour
         else if (other.gameObject.tag.Equals("Minion"))
         {
             Minion minion = other.gameObject.GetComponent<Minion>();
-            _minionTouching++;
+            // _minionTouching++; TODO redundant
             if (!_isSatanPoint && id == minion.target.id && minion.IsFinalTargetSet())
             {
-                if (_minionTouching == 1)
-                {
+                // if (_minionTouching == 1) TODO redundant
+                // {
                     _gm.AddMinionPressing(this);
-                }
+                // }
             }
         }
         else if (other.gameObject.tag.Equals("PointsActivator"))
         {
             PointsActivator pointsActivator = other.gameObject.GetComponent<PointsActivator>();
             pointsActivator.HandlePointCollision(this);
+        }
+        else if (other.gameObject.tag.Equals("Hand"))
+        {
+            _gm.HandTouching(this);
         }
     }
 
@@ -112,7 +118,7 @@ public class Point : MonoBehaviour
             _playerTouching--;
             if (_isSatanPoint)
             {
-                if (_animActive)
+                if (_animActivePlayer)
                 {
                     _gm.StopPlayerTimers();
                 }
@@ -128,26 +134,26 @@ public class Point : MonoBehaviour
         {
             Minion minion = other.gameObject.GetComponent<Minion>();
 
-            _minionTouching--;
+            // _minionTouching--; TODO redundant
             if (id == minion.target.id && minion.IsFinalTargetSet())
             {
-                if (_animActive)
+                if (_animActiveMinion)
                 {
                     _gm.StopMinionTimers();
                 }
 
-                if (_minionTouching == 0)
-                {
-                    _gm.RemoveMinionPressing(this);
-                }
+                // if (_minionTouching == 0) TODO redundant
+                // {
+                    // _gm.RemoveMinionPressing(this); 
+                // }
             }
         }
     }
 
-    public void MinionLeft()
-    {
-        _minionTouching--;
-    }
+    // public void MinionLeft() TODO redundant
+    // {
+    //     _minionTouching--;
+    // }
 
 
     /// <summary>
@@ -159,9 +165,14 @@ public class Point : MonoBehaviour
         return _playerTouching;
     }
 
-    public void SetAnimActive(bool val)
+    public void SetAnimActivePlayer(bool val)
     {
-        _animActive = val;
+        _animActivePlayer = val;
+    }
+
+    public void SetAnimActiveMinion(bool val)
+    {
+        _animActiveMinion = val;
     }
 
     public bool IsInLevel()

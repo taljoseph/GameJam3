@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class GManager : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GManager : MonoBehaviour
     [SerializeField] private List<Point> _currPressing = new List<Point>();
     [SerializeField] private List<Point> _currMinionPressing = new List<Point>();
     [SerializeField] private int _satanPointsCounter = 0;
+    [SerializeField] private GameObject borders;
+    [SerializeField] private float speedPenaltyTimer = 5;
 
     [SerializeField] private List<PointListL> pointsNeighbours;
 
@@ -62,7 +65,7 @@ public class GManager : MonoBehaviour
         {
             foreach (var point in _currPressing)
             {
-                point.SetAnimActive(true);
+                point.SetAnimActivePlayer(true);
                 var an = point.GetPlayerAnimator();
                 an.GetComponent<SpriteRenderer>().enabled = true;
                 an.Play("timer");
@@ -94,7 +97,7 @@ public class GManager : MonoBehaviour
         {
             foreach (var point in _currMinionPressing)
             {
-                point.SetAnimActive(true);
+                point.SetAnimActiveMinion(true);
                 var an = point.GetMinionAnimator();
                 an.GetComponent<SpriteRenderer>().enabled = true;
                 an.Play("timer");
@@ -129,6 +132,29 @@ public class GManager : MonoBehaviour
         // }
     }
 
+    public void HandTouching(Point p)
+    {
+        if (p.IsInLevel() && !p.IsSatanPoint() && !_currMinionPressing.Contains(p))
+        {
+            p.SetColour(Color.red);
+            p.SetActive(true);
+            RemoveFromPlayerPoints(p);
+        }
+    }
+
+    public void DizzyStat(MainCharacter player)
+    {
+        player.SetSpeed(player.GetSpeed() / 2);
+        StartCoroutine(HitPenalty(player));
+    }
+
+    public IEnumerator HitPenalty(MainCharacter player)
+    {
+        yield return new WaitForSeconds(speedPenaltyTimer);
+        player.SetSpeed(player.GetSpeed() * 2);
+        player.SetDizzy(false);
+    }
+
 
     public void RemovePressing(Point p)
     {
@@ -136,10 +162,10 @@ public class GManager : MonoBehaviour
         p.SetColour(Color.red);
     }
 
-    public void RemoveMinionPressing(Point p)
-    {
-        p.MinionLeft();
-    }
+    // public void RemoveMinionPressing(Point p) TODO redundant 
+    // {
+    //     p.MinionLeft();
+    // }
 
     public void StopPlayerTimers()
     {
@@ -177,9 +203,9 @@ public class GManager : MonoBehaviour
             var an = point.GetMinionAnimator();
             an.Rebind();
             an.GetComponent<SpriteRenderer>().enabled = false;
-
-            // point.SetColour(Color.cyan);
+            
         }
+        print(_currMinionPressing.Count);
 
         if (_currMinionPressing.Count >= 2)
         {
@@ -210,7 +236,7 @@ public class GManager : MonoBehaviour
         var an = point.GetPlayerAnimator();
         an.Rebind();
         an.GetComponent<SpriteRenderer>().enabled = false;
-        point.SetAnimActive(false);
+        point.SetAnimActivePlayer(false);
         //Debug.Log("curr Pressing count: " + _currPressing.Count);
         if (_currPressing.Count >= 2)
         {
@@ -242,11 +268,11 @@ public class GManager : MonoBehaviour
         }
         StopMinionTimers();
         satan.DestroyMinions();
-        foreach (var point in _currMinionPressing)
-        {
-            RemoveMinionPressing(point); 
-            
-        }
+        // foreach (var point in _currMinionPressing) TODO REMOVED
+        // {
+        //     RemoveMinionPressing(point); 
+        //     
+        // }
         _currMinionPressing.Clear();
     }
     
@@ -255,14 +281,14 @@ public class GManager : MonoBehaviour
         var an = point.GetMinionAnimator();
         an.Rebind();
         an.GetComponent<SpriteRenderer>().enabled = false;
-        point.SetAnimActive(false);
+        point.SetAnimActiveMinion(false);
         if (_currMinionPressing.Count >= 2)
         {
             ShootActivator(_currMinionPressing[1], _currMinionPressing[0], Possessor.Satan, ActivatorGoal.CompleteCapture);
             ShootActivator(_currMinionPressing[0], _currMinionPressing[1], Possessor.Satan, ActivatorGoal.CompleteCapture);
             satan.DestroyMinions();
-            RemoveMinionPressing(_currMinionPressing[0]);
-            RemoveMinionPressing(_currMinionPressing[1]);
+            // RemoveMinionPressing(_currMinionPressing[0]); TODO redundant 
+            // RemoveMinionPressing(_currMinionPressing[1]); TODO redundant
             _currMinionPressing.Clear();
             // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
             // {
@@ -411,6 +437,11 @@ public class GManager : MonoBehaviour
     private void ApplyTimer()
     {
         _timePassed += Time.deltaTime * addTime;
+    }
+
+    public GameObject GetBorders()
+    {
+        return borders;
     }
 }
 

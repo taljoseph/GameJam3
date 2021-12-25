@@ -10,6 +10,7 @@ TagManager:
   - Minion
   - PointsActivator
   - Point
+  - Hand
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - PointsActivatorMinions
   - Minion
   - Bullet
-  - 
+  - Hands
   - 
   - 
   - 

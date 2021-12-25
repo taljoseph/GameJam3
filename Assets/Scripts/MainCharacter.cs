@@ -9,12 +9,14 @@ public class MainCharacter : MonoBehaviour
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private KeyCode dashKey;
     [SerializeField] private bool inDashMode = false;
-    [SerializeField] private int dashDuration;
+    [SerializeField] private float dashDuration;
     [SerializeField] private int dashCooldownDuration;
+    [SerializeField] private GManager gm;
     private Vector2 direction = Vector2.zero;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private bool _canDash = true;
+    private bool _dizzy = false;
 
     void Start()
     {
@@ -25,7 +27,6 @@ public class MainCharacter : MonoBehaviour
     void Update()
     {
         GetDirection();
-        Move();
         if (Input.GetKeyDown(dashKey) && _canDash)
         {
             StartCoroutine(Dash());
@@ -54,16 +55,51 @@ public class MainCharacter : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal_" + player);
         float y = Input.GetAxisRaw("Vertical_" + player);
-        direction = new Vector2(x, y);
+        if (!inDashMode)
+        {
+            direction = new Vector2(x, y).normalized;
+        }
     }
 
     void Move()
     {
-        _rb.velocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed);
+        if (!inDashMode)
+        {
+            _rb.velocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed);
+        }
+
+        if (inDashMode)
+        {
+            _rb.velocity = new Vector2(direction.x * moveSpeed *2, direction.y * moveSpeed *2);
+        }
     }
 
     public bool IsInDashMode()
     {
         return inDashMode;
+    }
+    
+    public void SetSpeed(float val)
+    {
+        moveSpeed = val;
+    }
+    
+    public float GetSpeed()
+    {
+        return moveSpeed;
+    }
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.tag.Equals("Hand") && _dizzy == false)
+        {
+            _dizzy = true;
+            gm.DizzyStat(this);
+        }
+    }
+
+    public void SetDizzy(bool val)
+    {
+        _dizzy = val;
     }
 }

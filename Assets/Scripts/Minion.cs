@@ -44,6 +44,10 @@ public class Minion : MonoBehaviour
                 _finalTargetIsSet = true;
             }
         }
+    }
+
+    private void FixedUpdate()
+    {
         float step = speed * Time.deltaTime; // calculate distance to move
         transform.position = Vector3.MoveTowards(transform.position, _curTarget, step);
     }
