@@ -91,11 +91,11 @@ public class MainEnemy : MonoBehaviour
     {
         if (_minions.Count >= 2 && _minions[1] != null)
         {
-            Destroy(_minions[1].gameObject, 0.1f);
+            Destroy(_minions[1].gameObject);
         }
         if (_minions.Count >= 1 && _minions[0] != null)
         {
-            Destroy(_minions[0].gameObject, 0.1f);
+            Destroy(_minions[0].gameObject);
         }
         _minions.Clear();
         _areMinionsActive = false;
