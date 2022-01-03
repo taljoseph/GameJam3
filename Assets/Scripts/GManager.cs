@@ -161,7 +161,6 @@ public class GManager : MonoBehaviour
     public void DecreaseCrackCount()
     {
         unrepairedCracksCounter--;
-        print(unrepairedCracksCounter);
     }
     
 
