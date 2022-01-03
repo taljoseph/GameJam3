@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PointAnMinion : MonoBehaviour
 {
-    [SerializeField] private Point point;
+    [SerializeField] private Crack crack;
     [SerializeField] private GManager _gm;
 
     private void Start()
@@ -16,6 +16,6 @@ public class PointAnMinion : MonoBehaviour
     private void PointDeactivate()
     {
         //Debug.Log("should call point minion success");
-        _gm.MinionPointSuccess(point);
+        // _gm.MinionPointSuccess(point);
     }
 }

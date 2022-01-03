@@ -6,28 +6,28 @@ using UnityEngine.Serialization;
 
 public class GManager : MonoBehaviour
 {
-    [SerializeField] private Transform points;
+    [SerializeField] private Transform cracks;
     [SerializeField] private float timeToDeactivate = 10f;
-    public GameObject activatorPref;
-
     private float _timePassed = 0;
     [SerializeField] private float addTime = 2;
-    public MainEnemy satan;
-    private bool _pointsAvailable = false;
-    private List<Point> _levelPoints;
-    private List<Point> _playerLevelPoints;
+    public MainEnemy kraken;
+    private bool _shipHasCracks = false;
+    private List<Crack> levelCracks;
+    private List<Crack> _repairedCracks;
     private int _curBatch = 0;
-    [SerializeField] private List<Point> _currPressing = new List<Point>();
-    [SerializeField] private List<Point> _currMinionPressing = new List<Point>();
-    [SerializeField] private int _satanPointsCounter = 0;
+    [SerializeField] private int unrepairedCracksCounter = 0;
     [SerializeField] private GameObject borders;
     [SerializeField] private float speedPenaltyTimer = 5;
 
-    [SerializeField] private List<PointListL> pointsNeighbours;
+    [SerializeField] private MainCharacter p1;
+    [SerializeField] private MainCharacter p2;
 
-    public List<Point> GetRandomTargets()
+    private List<List<int>> levels = new List<List<int>>();
+
+
+    public List<Crack> GetRandomTargets()
     {
-        var numOfInactivePoints = _levelPoints.Count - _satanPointsCounter;
+        var numOfInactivePoints = levelCracks.Count - unrepairedCracksCounter;
         if (numOfInactivePoints < 2)
         {
             return null;
@@ -40,107 +40,11 @@ public class GManager : MonoBehaviour
             ind2 = Random.Range(0, numOfInactivePoints);
         }
 
-        var p1 = _playerLevelPoints[ind1];
-        var p2 = _playerLevelPoints[ind2];
-        return new List<Point>() {p1, p2};
+        var p1 = _repairedCracks[ind1];
+        var p2 = _repairedCracks[ind2];
+        return new List<Crack>() {p1, p2};
     }
-
-    public void ShootActivator(Point source, Point dest, Possessor possessor, ActivatorGoal goal)
-    {
-        var activator = Instantiate(activatorPref, source.transform.position, Quaternion.identity);
-        var activatorScript = activator.GetComponent<PointsActivator>();
-        activatorScript.SetSource(source);
-        activatorScript.SetDestination(dest);
-        activatorScript.SetGoal(goal);
-        activatorScript.SetPossessor(possessor);
-        activatorScript.SetLayer(possessor == Possessor.Player ? 3 : 7);
-    }
-
-
-    public void AddPressing(Point p)
-    {
-        _currPressing.Add(p);
-        p.SetColour(Color.cyan);
-        if (_currPressing.Count >= 2)
-        {
-            foreach (var point in _currPressing)
-            {
-                point.SetAnimActivePlayer(true);
-                var an = point.GetPlayerAnimator();
-                an.GetComponent<SpriteRenderer>().enabled = true;
-                an.Play("timer");
-            }
-
-            ShootActivator(p, _currPressing[0], Possessor.Player, ActivatorGoal.StartCapture);
-            ShootActivator(_currPressing[0], p, Possessor.Player, ActivatorGoal.StartCapture);
-            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            // {
-            //     for (int i = 0; i < cur.Count; i++)
-            //     {
-            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
-            //         {
-            //             cur[i].SetColour(Color.cyan);
-            //             
-            //         }
-            //     }
-            // }
-        }
-    }
-
-
-    public void AddMinionPressing(Point p)
-    {
-        //Debug.Log("minion pressing!");
-        _currMinionPressing.Add(p);
-        p.SetColour(Color.yellow);
-        if (_currMinionPressing.Count >= 2)
-        {
-            foreach (var point in _currMinionPressing)
-            {
-                point.SetAnimActiveMinion(true);
-                var an = point.GetMinionAnimator();
-                an.GetComponent<SpriteRenderer>().enabled = true;
-                an.Play("timer");
-            }
-
-            ShootActivator(p, _currMinionPressing[0], Possessor.Satan, ActivatorGoal.StartCapture);
-            ShootActivator(_currMinionPressing[0], p, Possessor.Satan, ActivatorGoal.StartCapture);
-        }
-
-        // _currMinionPressing.Add(p);
-        // //p.SetColour(Color.cyan);
-        // if (_currMinionPressing.Count >= 2)
-        // {
-        //     var cur = pointsNeighbours[_currMinionPressing[0].GetId()].list[_currMinionPressing[1].GetId()].list;
-        //     {
-        //         satan.DestroyMinions();
-        //
-        //         RemoveMinionPressing(_currMinionPressing[0]);
-        //         RemoveMinionPressing(_currMinionPressing[1]);
-        //         _currMinionPressing.Clear();
-        //         for (int i = 0; i < cur.Count; i++)
-        //         {
-        //             if (cur[i].IsInLevel() && !cur[i].IsSatanPoint())
-        //             {
-        //                 cur[i].SetColour(Color.red);
-        //                 cur[i].SetActive(true);
-        //                 _satanPointsCounter++;
-        //                 _playerLevelPoints.Remove(cur[i]);
-        //             }
-        //         }
-        //     }
-        // }
-    }
-
-    public void HandTouching(Point p)
-    {
-        if (p.IsInLevel() && !p.IsSatanPoint() && !_currMinionPressing.Contains(p))
-        {
-            p.SetColour(Color.red);
-            p.SetActive(true);
-            RemoveFromPlayerPoints(p);
-        }
-    }
+    
 
     public void DizzyStat(MainCharacter player)
     {
@@ -155,268 +59,72 @@ public class GManager : MonoBehaviour
         player.SetDizzy(false);
     }
 
-
-    public void RemovePressing(Point p)
+    void Awake()
     {
-        _currPressing.Remove(p);
-        p.SetColour(Color.red);
-    }
-
-    // public void RemoveMinionPressing(Point p) TODO redundant 
-    // {
-    //     p.MinionLeft();
-    // }
-
-    public void StopPlayerTimers()
-    {
-        foreach (var point in _currPressing)
+        for (int i = 0; i < cracks.childCount; i++)
         {
-            //Debug.Log("stopping animation");
-            var an = point.GetPlayerAnimator();
-            an.Rebind();
-            an.GetComponent<SpriteRenderer>().enabled = false;
-
-            // point.SetColour(Color.cyan);
+            cracks.GetChild(i).GetComponent<Crack>().SetId(i);
         }
 
-        if (_currPressing.Count >= 2)
+        List<int> level1 = new List<int>() {0, 8, 16, 24, 32, 40, 48, 6, 12, 18, 30, 36, 42};
+        List<int> level2 = new List<int>() {};
+        for (int i = 0; i < 7; i ++)
         {
-            ShootActivator(_currPressing[1], _currPressing[0], Possessor.Player, ActivatorGoal.StopCapture);
-            ShootActivator(_currPressing[0], _currPressing[1], Possessor.Player, ActivatorGoal.StopCapture);
-            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            // {
-            //     for (int i = 0; i < cur.Count; i++)
-            //     {
-            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
-            //         {
-            //             cur[i].SetColour(Color.red);
-            //         }
-            //     }
-            // }
+            for (int j = 0; j < 7; j+=2)
+            {
+                level2.Add(i * 7 + j);
+            }
         }
+        List<int> level3 = new List<int>() {0, 1, 7, 8, 5, 6, 12, 13, 35, 36, 42, 43, 40, 41, 47, 48, 24, 23, 25, 31, 17};
+        levels.Add(level1);
+        levels.Add(level2);
+        levels.Add(level3);
+
     }
-
-    public void StopMinionTimers()
-    {
-        foreach (var point in _currMinionPressing)
-        {
-            var an = point.GetMinionAnimator();
-            an.Rebind();
-            an.GetComponent<SpriteRenderer>().enabled = false;
-            
-        }
-        print(_currMinionPressing.Count);
-
-        if (_currMinionPressing.Count >= 2)
-        {
-            ShootActivator(_currMinionPressing[1], _currMinionPressing[0], Possessor.Satan, ActivatorGoal.StopCapture);
-            ShootActivator(_currMinionPressing[0], _currMinionPressing[1], Possessor.Satan, ActivatorGoal.StopCapture);
-            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            // {
-            //     for (int i = 0; i < cur.Count; i++)
-            //     {
-            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint() && cur[i] != _currPressing[0] && cur[i] != _currPressing[1])
-            //         {
-            //             cur[i].SetColour(Color.red);
-            //         }
-            //     }
-            // }
-        }
-    }
-
-    
-    
-    
-    /// <summary>
-    /// Called when the clock finished its -
-    /// </summary>
-    /// <param name="point"></param>
-    public void PlayerPointSuccess(Point point)
-    {
-        var an = point.GetPlayerAnimator();
-        an.Rebind();
-        an.GetComponent<SpriteRenderer>().enabled = false;
-        point.SetAnimActivePlayer(false);
-        //Debug.Log("curr Pressing count: " + _currPressing.Count);
-        if (_currPressing.Count >= 2)
-        {
-            ShootActivator(_currPressing[1], _currPressing[0], Possessor.Player, ActivatorGoal.CompleteCapture);
-            ShootActivator(_currPressing[0], _currPressing[1], Possessor.Player, ActivatorGoal.CompleteCapture);
-            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            // {
-            //     for (int i = 0; i < cur.Count; i++)
-            //     {
-            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
-            //         {
-            //             cur[i].SetColour(Color.green);
-            //             cur[i].SetActive(false);
-            //             _satanPointsCounter--;
-            //             _playerLevelPoints.Add(cur[i]);
-            //         }
-            //     }
-            // }
-        }
-
-        _currPressing.Clear();
-    }
-
-    public void MinionGotHit()
-    {
-        foreach (var point in _currMinionPressing)
-        { 
-            point.RestorePointColor();
-        }
-        StopMinionTimers();
-        satan.DestroyMinions();
-        // foreach (var point in _currMinionPressing) TODO REMOVED
-        // {
-        //     RemoveMinionPressing(point); 
-        //     
-        // }
-        _currMinionPressing.Clear();
-    }
-    
-    public void MinionPointSuccess(Point point)
-    {
-        var an = point.GetMinionAnimator();
-        an.Rebind();
-        an.GetComponent<SpriteRenderer>().enabled = false;
-        point.SetAnimActiveMinion(false);
-        if (_currMinionPressing.Count >= 2)
-        {
-            ShootActivator(_currMinionPressing[1], _currMinionPressing[0], Possessor.Satan, ActivatorGoal.CompleteCapture);
-            ShootActivator(_currMinionPressing[0], _currMinionPressing[1], Possessor.Satan, ActivatorGoal.CompleteCapture);
-            satan.DestroyMinions();
-            // RemoveMinionPressing(_currMinionPressing[0]); TODO redundant 
-            // RemoveMinionPressing(_currMinionPressing[1]); TODO redundant
-            _currMinionPressing.Clear();
-            // var cur = pointsNeighbours[_currPressing[0].GetId()].list[_currPressing[1].GetId()].list;
-            // {
-            //     for (int i = 0; i < cur.Count; i++)
-            //     {
-            //         if (cur[i].IsInLevel() && cur[i].IsSatanPoint())
-            //         {
-            //             cur[i].SetColour(Color.green);
-            //             cur[i].SetActive(false);
-            //             _satanPointsCounter--;
-            //             _playerLevelPoints.Add(cur[i]);
-            //         }
-            //     }
-            // }
-        }
-
-        _currMinionPressing.Clear();
-    }
-    
-    
-
-    public void AddToPlayerPoints(Point p)
-    {
-        _satanPointsCounter--;
-        _playerLevelPoints.Add(p);
-    }
-
-    public void RemoveFromPlayerPoints(Point p)
-    {
-        _satanPointsCounter++;
-        _playerLevelPoints.Remove(p);
-    }
-
 
     void Start()
     {
-        _levelPoints = new List<Point>();
-        _playerLevelPoints = new List<Point>();
-        InitPoints(2);
-        _curBatch = (_curBatch + 1) % points.childCount;
+        levelCracks = new List<Crack>();
+        _repairedCracks = new List<Crack>();
+        InitCracks(0);
+        _curBatch = 0;
     }
 
-    private void InitPoints(int round)
+    private void InitCracks(int level)
     {
-        var temp = new List<Point>();
-        for (int j = 0; j < round + 1; j++)
+        for (int j = 0; j < levels[level].Count ; j++)
         {
-            var curCircle = points.GetChild(j);
-            for (int i = 0; i < curCircle.childCount; i++)
-            {
-                var point = curCircle.GetChild(i).GetComponent<Point>();
-                _levelPoints.Add(point);
-                point.SetActive(true);
-                point.SetColour(Color.red);
-                point.SetInLevel(true);
-                if (point.NumPlayersTouching() > 0 && point.NumPlayersTouching() != 2)
-                {
-                    temp.Add(point);
-                }
-            }
-
-            _playerLevelPoints = new List<Point>();
+            var cur = cracks.GetChild(levels[level][j]).GetComponent<Crack>();
+            levelCracks.Add(cur);
+            cur.gameObject.SetActive(true);
+            cur.SetInLevel(true);
         }
-
-        foreach (var p in temp)
-        {
-            AddPressing(p);
-        }
-
-        _pointsAvailable = true;
-        _satanPointsCounter = _levelPoints.Count;
+        _repairedCracks.Clear();
+        _shipHasCracks = true;
+        unrepairedCracksCounter = levels[level].Count;
     }
 
-    private void LevelPointsReset()
+    private void LevelCracksReset()
     {
         _timePassed = 0;
-        foreach (var point in _levelPoints)
+        foreach (var crack in levelCracks)
         {
-            point.SetColour(Color.white);
-            point.SetInLevel(false);
+            crack.gameObject.SetActive(false);
+            crack.SetInLevel(false);
         }
 
-        _levelPoints.Clear();
+        levelCracks.Clear();
     }
 
     void Update()
     {
-        if (_pointsAvailable)
+        if (_shipHasCracks)
         {
-            // if (Point.Pressing() >= 2)
-            // {
-            //     List<Point> nowOn = new List<Point>();
-            //     foreach (var point in _activePoints)
-            //     {
-            //         if (point.NumTouching() >= 1)
-            //         {
-            //             nowOn.Add(point);
-            //         }
-            //     }
-            // }
-
-            // if (Point.Pressing() >= 2)
-            // {
-            //     ApplyTimer();
-            // }
-            // else if (Point.Pressing() < 2 && _timePassed != 0)
-            // {
-            //     _timePassed = 0;
-            // }
-            // if (_timePassed >= timeToDeactivate)
-            // {
-            //     for (int i = _activePoints.Count - 1; i >= 0; i--)
-            //     {
-            //         if (_activePoints[i].IsPressed())
-            //         {
-            //             _activePoints[i].SetActive(false);
-            //             _activePoints[i].SetPressing(false);
-            //             _activePoints[i].SetColour(Color.green);
-            //             _deactivatedPoints.Add(_activePoints[i]);
-            //             _activePoints.RemoveAt(i);
-            //         }
-            //         Point.ResetTotalPressing();
-            //     }
-            // }
-            if (_satanPointsCounter <= 0)
+            if (unrepairedCracksCounter <= 0 && _curBatch < levels.Count - 1)
             {
-                LevelPointsReset();
-                _pointsAvailable = false;
+                _curBatch++;
+                LevelCracksReset();
+                _shipHasCracks = false;
                 StartCoroutine(StartNextBatch());
             }
         }
@@ -430,26 +138,40 @@ public class GManager : MonoBehaviour
     private IEnumerator StartNextBatch()
     {
         yield return new WaitForSeconds(5);
-        InitPoints(_curBatch);
-        _curBatch = (_curBatch + 1) % points.childCount;
-    }
-
-    private void ApplyTimer()
-    {
-        _timePassed += Time.deltaTime * addTime;
+        InitCracks(_curBatch);
     }
 
     public GameObject GetBorders()
     {
         return borders;
     }
+
+    public void AxeShot()
+    {
+        p1.Freeze(true);
+        p2.Freeze(true);
+    }
+
+    public void AxeHitPlayer()
+    {
+        p1.Freeze(false);
+        p2.Freeze(false);
+    }
+
+    public void DecreaseCrackCount()
+    {
+        unrepairedCracksCounter--;
+        print(unrepairedCracksCounter);
+    }
+    
+
 }
 
 
 [System.Serializable]
 public class PointList
 {
-    public List<Point> list;
+    public List<Crack> list;
 }
 
 [System.Serializable]

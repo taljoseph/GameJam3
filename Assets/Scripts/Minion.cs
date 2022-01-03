@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class Minion : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    public Point target;
+    public Crack target;
     public List<Vector3> intermediateTargets;
     public int intermediateNum = 5;
     public int pathLength = 3;
@@ -57,14 +57,10 @@ public class Minion : MonoBehaviour
         if (col.gameObject.tag.Equals("Player"))
         {
             var player = col.gameObject.GetComponent<MainCharacter>();
-            if (player.IsInDashMode())
-            {
-                _gm.MinionGotHit();
-            }
         }
     }
 
-    public void SetTarget(Point pTarget)
+    public void SetTarget(Crack pTarget)
     {
         target = pTarget;
     }

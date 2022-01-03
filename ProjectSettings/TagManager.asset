@@ -11,6 +11,7 @@ TagManager:
   - PointsActivator
   - Point
   - Hand
+  - Crack
   layers:
   - Default
   - TransparentFX

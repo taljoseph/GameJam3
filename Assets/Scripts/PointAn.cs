@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PointAn : MonoBehaviour
 {
-    [SerializeField] private Point point;
+    [SerializeField] private Crack crack;
     [SerializeField] private GManager _gm;
 
     private void Start()
@@ -16,6 +16,6 @@ public class PointAn : MonoBehaviour
     private void PointDeactivate()
     {
         Debug.Log("should call point success");
-        _gm.PlayerPointSuccess(point);
+        // _gm.PlayerPointSuccess(point);
     }
 }
