@@ -18,7 +18,7 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private GameObject firePoint;
     [SerializeField] private float timeBetweenShots = 5f;
     [SerializeField] private float timeBetweenMinions = 10f;
-    [SerializeField] private float timeBetweenHands = 20f;
+    [SerializeField] private float timeBetweenSwipeAttacks = 20f;
     [SerializeField] private Vector3 shootingDirection;
     private List<Point> _minionTargets;
     public List<Minion> _minions = new List<Minion>();
@@ -30,6 +30,8 @@ public class MainEnemy : MonoBehaviour
     private Quaternion _defRotationRight; 
     private Quaternion _defRotationLeft; 
     private bool handAttack = false;
+    [SerializeField] private float handSpeed = 90;
+    [SerializeField] private float timeBetweenHands = 2;
     
     
     // Start is called before the first frame update
@@ -140,7 +142,7 @@ public class MainEnemy : MonoBehaviour
             yield return new WaitForSeconds(shakeTime);
             // handA.GetComponent<Rigidbody2D>().DORotate(270f, 3.5f);
             _rotateRight = true;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(timeBetweenHands);
             // handB.GetComponent<Rigidbody2D>().DORotate(-450f, 3.5f);
             _rotateLeft = true;
             yield return new WaitForSeconds(2);
@@ -161,7 +163,7 @@ public class MainEnemy : MonoBehaviour
             }
             
 
-            handR.rotation = Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * 90 * Time.deltaTime);
+            handR.rotation = Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * handSpeed * Time.deltaTime);
         }
 
         if (_rotateLeft)
@@ -171,7 +173,7 @@ public class MainEnemy : MonoBehaviour
                 _rotateLeft = false;
                 handL.rotation = _defRotationLeft;
             }
-            handL.rotation = Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -90 * Time.deltaTime);
+            handL.rotation = Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
 
         }
     }
