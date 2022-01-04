@@ -99,7 +99,6 @@ public class GManager : MonoBehaviour
             cur.gameObject.SetActive(true);
             cur.SetInLevel(true);
         }
-        _repairedCracks.Clear();
         _shipHasCracks = true;
         unrepairedCracksCounter = levels[level].Count;
     }
@@ -114,6 +113,7 @@ public class GManager : MonoBehaviour
         }
 
         levelCracks.Clear();
+        _repairedCracks.Clear();
     }
 
     void Update()
@@ -127,11 +127,17 @@ public class GManager : MonoBehaviour
                 _shipHasCracks = false;
                 StartCoroutine(StartNextBatch());
             }
+
+            if (_curBatch == levels.Count - 1 && unrepairedCracksCounter <= 0)
+            {
+                _shipHasCracks = false;
+                LevelCracksReset();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("Main Menu");
         }
     }
 
@@ -158,10 +164,30 @@ public class GManager : MonoBehaviour
         p2.Freeze(false);
     }
 
-    public void DecreaseCrackCount()
+    public void CrackFix(Crack cr)
     {
+        _repairedCracks.Add(cr);
         unrepairedCracksCounter--;
     }
+
+    public Crack GetCrack()
+    {
+        if (_repairedCracks.Count > 0)
+        {
+            Crack target = _repairedCracks[0];
+            _repairedCracks.RemoveAt(0);
+            unrepairedCracksCounter++;
+            return target;
+        }
+        return null;
+    }
+
+    public void AxeHitTentacle()
+    {
+        kraken.SetDizzy(true);
+        StartCoroutine(kraken.HitPenalty());
+    }
+    
     
 
 }

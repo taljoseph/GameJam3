@@ -32,8 +32,12 @@ public class MainEnemy : MonoBehaviour
     private bool handAttack = false;
     [SerializeField] private float handSpeed = 90;
     [SerializeField] private float timeBetweenHands = 2;
-    
-    
+    [SerializeField] private GameObject indicatorPref;
+    [SerializeField] private GameObject tentaclePref;
+    [SerializeField] private GameObject vulTentPref;
+    private bool dizzy = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +49,9 @@ public class MainEnemy : MonoBehaviour
             Physics2D.IgnoreCollision(handR.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
             Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
         }
+
+        StartCoroutine(TentacleAttack());
+        StartCoroutine(VulTentAttack());
         // StartCoroutine(SimpleShot());
         // StartCoroutine(SendMinions());
         // StartCoroutine(HandAttack());
@@ -136,10 +143,9 @@ public class MainEnemy : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenHands);
             handAttack = true;
-            // _gm.MinionGotHit(); // TODO yellow point bug maybe? 
-            int shakeTime = 3;
-            GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
-            yield return new WaitForSeconds(shakeTime);
+            // int shakeTime = 3;
+            // GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+            // yield return new WaitForSeconds(shakeTime);
             // handA.GetComponent<Rigidbody2D>().DORotate(270f, 3.5f);
             _rotateRight = true;
             yield return new WaitForSeconds(timeBetweenHands);
@@ -176,5 +182,85 @@ public class MainEnemy : MonoBehaviour
             handL.rotation = Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
 
         }
+    }
+
+    public IEnumerator VulTentAttack()
+    {
+        while (true)
+        {
+            if (dizzy)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                yield return new WaitForSeconds(5f);
+                Crack objective = _gm.GetCrack();
+                if (objective)
+                {
+                    Vector3 pos = objective.transform.position;
+                    var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+                    indicator.SetActive(true);
+                    yield return new WaitForSeconds(0.2f);
+                    indicator.SetActive(false);
+                    yield return new WaitForSeconds(0.2f);
+                    indicator.SetActive(true);
+                    yield return new WaitForSeconds(0.2f);
+                    Destroy(indicator);
+                    yield return new WaitForSeconds(0.2f);
+                    var curTent = Instantiate(vulTentPref, pos, Quaternion.identity);
+                    objective.gameObject.SetActive(true);
+                    yield return new WaitForSeconds(2f);
+                    Destroy(curTent);
+                }
+            }
+            
+        }
+    }
+
+    public IEnumerator TentacleAttack()
+    {
+        while (true)
+        {
+            if (dizzy)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1f);
+                Crack objective = _gm.GetCrack();
+                if (objective)
+                {
+                    Vector3 pos = objective.transform.position;
+                    var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+                    indicator.SetActive(true);
+                    yield return new WaitForSeconds(0.2f);
+                    indicator.SetActive(false);
+                    yield return new WaitForSeconds(0.2f);
+                    indicator.SetActive(true);
+                    yield return new WaitForSeconds(0.2f);
+                    Destroy(indicator);
+                    yield return new WaitForSeconds(0.2f);
+                    var curTent = Instantiate(tentaclePref, pos, Quaternion.identity);
+                    objective.gameObject.SetActive(true);
+                    yield return new WaitForSeconds(0.5f);
+                    Destroy(curTent);
+                }
+            }
+            
+        }
+    }
+
+    public IEnumerator HitPenalty()
+    {
+        yield return new WaitForSeconds(5);
+        dizzy = false;
+    }
+
+    
+    public void SetDizzy(bool val)
+    {
+        dizzy = val;
     }
 }

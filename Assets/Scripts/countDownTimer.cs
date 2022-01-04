@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class countDownTimer : MonoBehaviour
 {
     public Text timetText;
-    public float startingTime = 25f;
+    public float startingTime = 100f;
     private float curTime = 0f;
     private bool flag = true;
     private GManager gameManagerScript;
@@ -25,7 +26,7 @@ public class countDownTimer : MonoBehaviour
         timetText.text = curTime.ToString("0");
         if (curTime <= 0)
         {
-            //gameManagerScript.endGame();
+            SceneManager.LoadScene("Main Menu");
         }
     }
 }

@@ -83,6 +83,8 @@ public class MainCharacter : MonoBehaviour
 
         if (other.transform.tag.Equals("Tentacle"))  
         {
+            float bounce = 300f; //amount of force to apply
+            _rb.AddForce(other.contacts[0].normal * bounce);
             _frozen = true;
             StartCoroutine(TentacleHit());
         }

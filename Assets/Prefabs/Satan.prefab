@@ -134,5 +134,12 @@ MonoBehaviour:
   firePoint: {fileID: 1708674705922310659}
   timeBetweenShots: 2
   timeBetweenMinions: 6
+  timeBetweenSwipeAttacks: 20
   shootingDirection: {x: 0, y: 0, z: 0}
   _minions: []
+  handR: {fileID: 0}
+  handL: {fileID: 0}
+  handSpeed: 90
+  timeBetweenHands: 2
+  indicatorPref: {fileID: 1714526600957077443, guid: 1384e3d8bf7692d4994a8a15d6241013, type: 3}
+  tentaclePref: {fileID: 8254258667246747162, guid: ccf8c1c1273d8bc4ea53274a1ae957a4, type: 3}

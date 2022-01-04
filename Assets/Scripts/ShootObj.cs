@@ -150,7 +150,12 @@ public class ShootObj : MonoBehaviour
         if (GOtag.Equals("Crack"))
         {
             other.gameObject.SetActive(false);
-            _gm.DecreaseCrackCount();
+            _gm.CrackFix(other.GetComponent<Crack>());
+        }
+
+        if (GOtag.Equals("Tentacle"))
+        {
+            _gm.AxeHitTentacle();
         }
         
     }
