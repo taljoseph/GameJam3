@@ -37,7 +37,7 @@ public class MainCharacter : MonoBehaviour
         {
             if (hasAxe)
             {
-                ShootAxe(transform.position , secondPlayer.transform.position);
+                ShootAxe(this , secondPlayer);
             }
         }
     }
@@ -112,16 +112,16 @@ public class MainCharacter : MonoBehaviour
         _dizzy = val;
     }
     
-    public void ShootAxe(Vector3 source,Vector3 dest)
+    public void ShootAxe(MainCharacter source,MainCharacter dest)
     {
-        var axe = Instantiate(axePrefab, source, Quaternion.identity);
+        var axe = Instantiate(axePrefab, source.transform.position, Quaternion.identity);
         var shootScript = axe.GetComponent<ShootObj>();
         shootScript.SetHolder(gameObject);
         shootScript.SetSource(source);
-        shootScript.SetDestination(dest);
+        shootScript.SetTarget(dest);
         shootScript.SetLayer(0);
         hasAxe = false;
-        gm.AxeShot();
+        //gm.AxeShot();
     }
 
     public void Freeze(bool val)

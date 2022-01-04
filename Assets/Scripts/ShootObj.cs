@@ -19,8 +19,8 @@ using UnityEngine;
 public class ShootObj : MonoBehaviour
 {
     [SerializeField] private float speed = 80;
-    public Vector3 destination;
-    public Vector3 source;
+    public MainCharacter target;
+    public MainCharacter source;
     private GManager _gm;
     private Rigidbody2D _rb;
     private bool _isShot = false;
@@ -46,22 +46,20 @@ public class ShootObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_isShot && destination != null && _rb != null)
+        if (_rb != null)
         {
-            Vector3 velocity = speed * (destination - transform.position).normalized;
+            Vector3 velocity = speed * (target.transform.position - transform.position).normalized;
             _rb.velocity = velocity;
-            _isShot = true;
-            // float step =  speed * Time.deltaTime; // calculate distance to move
-            // transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step);               
         }
+
     }
 
-    public void SetDestination(Vector3 dest)
+    public void SetTarget(MainCharacter t)
     {
-        destination = dest;
+        this.target = t;
     }
     
-    public void SetSource(Vector3 s)
+    public void SetSource(MainCharacter s)
     {
         source = s;
     }
@@ -141,7 +139,7 @@ public class ShootObj : MonoBehaviour
             MainCharacter player = other.GetComponent<MainCharacter>();
             if (!GetHolder().Equals(other.gameObject))
             {
-                _gm.AxeHitPlayer();
+                //_gm.AxeHitPlayer();
                 player.SetHasAxe(true);
                 Destroy(gameObject);
             }

@@ -12,22 +12,25 @@ public class GManager : MonoBehaviour
     [SerializeField] private float addTime = 2;
     public MainEnemy kraken;
     private bool _shipHasCracks = false;
-    private List<Crack> levelCracks;
-    private List<Crack> _repairedCracks;
+    private List<Crack> allCracks;
+    private List<Crack> _inactiveCracks;
     private int _curBatch = 0;
-    [SerializeField] private int unrepairedCracksCounter = 0;
+    [SerializeField] private int activeCracksCounter = 0;
     [SerializeField] private GameObject borders;
     [SerializeField] private float speedPenaltyTimer = 5;
 
     [SerializeField] private MainCharacter p1;
     [SerializeField] private MainCharacter p2;
-
-    private List<List<int>> levels = new List<List<int>>();
+    [SerializeField] private List<int> drowningThresholds;
+    [SerializeField] private List<int> hitsPerLevel;
+    private int _curHits = 0;
+    private List<int> levels = new List<int>();
+    
 
 
     public List<Crack> GetRandomTargets()
     {
-        var numOfInactivePoints = levelCracks.Count - unrepairedCracksCounter;
+        var numOfInactivePoints = allCracks.Count - activeCracksCounter;
         if (numOfInactivePoints < 2)
         {
             return null;
@@ -40,8 +43,8 @@ public class GManager : MonoBehaviour
             ind2 = Random.Range(0, numOfInactivePoints);
         }
 
-        var p1 = _repairedCracks[ind1];
-        var p2 = _repairedCracks[ind2];
+        var p1 = _inactiveCracks[ind1];
+        var p2 = _inactiveCracks[ind2];
         return new List<Crack>() {p1, p2};
     }
     
@@ -61,91 +64,59 @@ public class GManager : MonoBehaviour
 
     void Awake()
     {
+        allCracks = new List<Crack>();
+        _inactiveCracks = new List<Crack>();
         for (int i = 0; i < cracks.childCount; i++)
         {
-            cracks.GetChild(i).GetComponent<Crack>().SetId(i);
-        }
+            Crack crack = cracks.GetChild(i).GetComponent<Crack>();
+            crack.SetId(i);
+            crack.SetInLevel(true);
+            
+            _inactiveCracks.Add(crack);
+            allCracks.Add(crack);
 
-        List<int> level1 = new List<int>() {0, 8, 16, 24, 32, 40, 48, 6, 12, 18, 30, 36, 42};
-        List<int> level2 = new List<int>() {};
-        for (int i = 0; i < 7; i ++)
-        {
-            for (int j = 0; j < 7; j+=2)
-            {
-                level2.Add(i * 7 + j);
-            }
         }
-        List<int> level3 = new List<int>() {0, 1, 7, 8, 5, 6, 12, 13, 35, 36, 42, 43, 40, 41, 47, 48, 24, 23, 25, 31, 17};
-        levels.Add(level1);
-        levels.Add(level2);
-        levels.Add(level3);
+        activeCracksCounter = 0;
+
 
     }
 
-    void Start()
-    {
-        levelCracks = new List<Crack>();
-        _repairedCracks = new List<Crack>();
-        InitCracks(0);
-        _curBatch = 0;
-    }
+    
 
-    private void InitCracks(int level)
-    {
-        for (int j = 0; j < levels[level].Count ; j++)
-        {
-            var cur = cracks.GetChild(levels[level][j]).GetComponent<Crack>();
-            levelCracks.Add(cur);
-            cur.gameObject.SetActive(true);
-            cur.SetInLevel(true);
-        }
-        _shipHasCracks = true;
-        unrepairedCracksCounter = levels[level].Count;
-    }
+    // private void InitCracks(int level)
+    // {
+    //     for (int j = 0; j < levels[level].Count ; j++)
+    //     {
+    //         var cur = cracks.GetChild(levels[level][j]).GetComponent<Crack>();
+    //         allCracks.Add(cur);
+    //         cur.SetInLevel(true);
+    //     }
+    //     _shipHasCracks = true;
+    //     activeCracksCounter = 0;
+    // }
 
-    private void LevelCracksReset()
-    {
-        _timePassed = 0;
-        foreach (var crack in levelCracks)
-        {
-            crack.gameObject.SetActive(false);
-            crack.SetInLevel(false);
-        }
-
-        levelCracks.Clear();
-        _repairedCracks.Clear();
-    }
+    
 
     void Update()
     {
-        if (_shipHasCracks)
+        if (_curBatch <= drowningThresholds.Count - 1)
         {
-            if (unrepairedCracksCounter <= 0 && _curBatch < levels.Count - 1)
+            //Debug.Log(_curBatch);
+            
+            if (activeCracksCounter >= drowningThresholds[_curBatch])
             {
-                _curBatch++;
-                LevelCracksReset();
-                _shipHasCracks = false;
-                StartCoroutine(StartNextBatch());
+                SceneManager.LoadScene("Main Menu");
             }
 
-            if (_curBatch == levels.Count - 1 && unrepairedCracksCounter <= 0)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                _shipHasCracks = false;
-                LevelCracksReset();
-            }
+                SceneManager.LoadScene("Main Menu");
+            }            
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene("Main Menu");
-        }
     }
 
-    private IEnumerator StartNextBatch()
-    {
-        yield return new WaitForSeconds(5);
-        InitCracks(_curBatch);
-    }
+    
 
     public GameObject GetBorders()
     {
@@ -166,17 +137,18 @@ public class GManager : MonoBehaviour
 
     public void CrackFix(Crack cr)
     {
-        _repairedCracks.Add(cr);
-        unrepairedCracksCounter--;
+        _inactiveCracks.Add(cr);
+        activeCracksCounter--;
     }
 
     public Crack GetCrack()
     {
-        if (_repairedCracks.Count > 0)
+        if (_inactiveCracks.Count > 0)
         {
-            Crack target = _repairedCracks[0];
-            _repairedCracks.RemoveAt(0);
-            unrepairedCracksCounter++;
+            int targetInd = Random.Range(0, _inactiveCracks.Count);
+            Crack target = _inactiveCracks[targetInd];
+            _inactiveCracks.RemoveAt(targetInd);
+            activeCracksCounter++;
             return target;
         }
         return null;
@@ -184,8 +156,23 @@ public class GManager : MonoBehaviour
 
     public void AxeHitTentacle()
     {
-        kraken.SetDizzy(true);
-        StartCoroutine(kraken.HitPenalty());
+        _curHits++;
+        if (_curHits >= hitsPerLevel[_curBatch])
+        {
+            _curHits = 0;
+            _curBatch++;
+            Debug.Log("advanced to next level!");
+            if (_curBatch >= drowningThresholds.Count)
+            {
+                SceneManager.LoadScene("Main Menu");
+            }
+            kraken.AdvanceToNextLevel();
+            // move to next level
+        }
+        
+        
+        //kraken.SetDizzy(true);
+        //StartCoroutine(kraken.HitPenalty());
     }
     
     

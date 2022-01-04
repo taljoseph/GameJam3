@@ -23,12 +23,17 @@ public class MainEnemy : MonoBehaviour
     private List<Crack> _minionTargets;
     public List<Minion> _minions = new List<Minion>();
     private bool _areMinionsActive;
-    [FormerlySerializedAs("handA")] [SerializeField] private Transform handR;
-    [FormerlySerializedAs("handB")] [SerializeField] private Transform handL;
+
+    [FormerlySerializedAs("handA")] [SerializeField]
+    private Transform handR;
+
+    [FormerlySerializedAs("handB")] [SerializeField]
+    private Transform handL;
+
     private bool _rotateRight = false;
     private bool _rotateLeft = false;
-    private Quaternion _defRotationRight; 
-    private Quaternion _defRotationLeft; 
+    private Quaternion _defRotationRight;
+    private Quaternion _defRotationLeft;
     private bool handAttack = false;
     [SerializeField] private float handSpeed = 90;
     [SerializeField] private float timeBetweenHands = 2;
@@ -36,6 +41,9 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private GameObject tentaclePref;
     [SerializeField] private GameObject vulTentPref;
     private bool dizzy = false;
+    private int _curLevel = 0;
+    [SerializeField] private List<float> normalTentacleWaitingTime;
+    [SerializeField] private List<float> specialTentacleWaitingTime;
 
 
     // Start is called before the first frame update
@@ -46,18 +54,19 @@ public class MainEnemy : MonoBehaviour
         GameObject borders = _gm.GetBorders();
         for (int i = 0; i < borders.transform.childCount; i++)
         {
-            Physics2D.IgnoreCollision(handR.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
-            Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
+            Physics2D.IgnoreCollision(handR.GetChild(0).GetComponent<Collider2D>(),
+                borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
+            Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(),
+                borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
         }
 
         StartCoroutine(TentacleAttack());
         StartCoroutine(VulTentAttack());
         // StartCoroutine(SimpleShot());
         // StartCoroutine(SendMinions());
-        // StartCoroutine(HandAttack());
+        StartCoroutine(HandAttack());
     }
-    
-    
+
 
     // Update is called once per frame
 
@@ -66,7 +75,7 @@ public class MainEnemy : MonoBehaviour
     {
         _minionTargets = _gm.GetRandomTargets();
     }
-    
+
     private IEnumerator SendMinions()
     {
         while (true)
@@ -102,10 +111,12 @@ public class MainEnemy : MonoBehaviour
         {
             Destroy(_minions[1].gameObject);
         }
+
         if (_minions.Count >= 1 && _minions[0] != null)
         {
             Destroy(_minions[0].gameObject);
         }
+
         _minions.Clear();
         _areMinionsActive = false;
     }
@@ -125,7 +136,7 @@ public class MainEnemy : MonoBehaviour
                 SetShootingDirection();
                 InitBullet();
             }
-            
+
             yield return new WaitForSeconds(timeBetweenShots);
         }
     }
@@ -154,22 +165,22 @@ public class MainEnemy : MonoBehaviour
             yield return new WaitForSeconds(2);
             handAttack = false;
         }
-        
     }
 
     public void FixedUpdate()
     {
         if (_rotateRight)
         {
-            if (handR.rotation.eulerAngles.z > (_defRotationRight.eulerAngles.z + 180) % 360 && 
+            if (handR.rotation.eulerAngles.z > (_defRotationRight.eulerAngles.z + 180) % 360 &&
                 handR.rotation.eulerAngles.z < _defRotationRight.eulerAngles.z)
             {
                 _rotateRight = false;
                 handR.rotation = _defRotationRight;
             }
-            
 
-            handR.rotation = Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * handSpeed * Time.deltaTime);
+
+            handR.rotation =
+                Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * handSpeed * Time.deltaTime);
         }
 
         if (_rotateLeft)
@@ -179,8 +190,9 @@ public class MainEnemy : MonoBehaviour
                 _rotateLeft = false;
                 handL.rotation = _defRotationLeft;
             }
-            handL.rotation = Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
 
+            handL.rotation =
+                Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
         }
     }
 
@@ -194,7 +206,7 @@ public class MainEnemy : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(5f);
+                yield return new WaitForSeconds(specialTentacleWaitingTime[_curLevel]);
                 Crack objective = _gm.GetCrack();
                 if (objective)
                 {
@@ -214,7 +226,6 @@ public class MainEnemy : MonoBehaviour
                     Destroy(curTent);
                 }
             }
-            
         }
     }
 
@@ -228,7 +239,7 @@ public class MainEnemy : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(normalTentacleWaitingTime[_curLevel]);
                 Crack objective = _gm.GetCrack();
                 if (objective)
                 {
@@ -248,7 +259,6 @@ public class MainEnemy : MonoBehaviour
                     Destroy(curTent);
                 }
             }
-            
         }
     }
 
@@ -258,9 +268,14 @@ public class MainEnemy : MonoBehaviour
         dizzy = false;
     }
 
-    
+
     public void SetDizzy(bool val)
     {
         dizzy = val;
+    }
+
+    public void AdvanceToNextLevel()
+    {
+        _curLevel++;
     }
 }
