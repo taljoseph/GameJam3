@@ -153,6 +153,7 @@ public class ShootObj : MonoBehaviour
 
         if (GOtag.Equals("Tentacle"))
         {
+            Destroy(other.gameObject);
             _gm.AxeHitTentacle();
         }
         

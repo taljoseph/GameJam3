@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Newtonsoft.Json.Serialization;
 using UnityEngine.Serialization;
+using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
 
 public class MainEnemy : MonoBehaviour
@@ -44,7 +45,8 @@ public class MainEnemy : MonoBehaviour
     private int _curLevel = 0;
     [SerializeField] private List<float> normalTentacleWaitingTime;
     [SerializeField] private List<float> specialTentacleWaitingTime;
-
+    [SerializeField] private List<float> normalTentacleAttackSize;
+    [SerializeField] private List<float> specialTentacleAttackSize;
 
     // Start is called before the first frame update
     void Start()
@@ -207,26 +209,54 @@ public class MainEnemy : MonoBehaviour
             else
             {
                 yield return new WaitForSeconds(specialTentacleWaitingTime[_curLevel]);
-                Crack objective = _gm.GetCrack();
-                if (objective)
+                for (int i = 0; i < specialTentacleAttackSize[_curLevel]; i++)
                 {
-                    Vector3 pos = objective.transform.position;
-                    var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
-                    indicator.SetActive(true);
-                    yield return new WaitForSeconds(0.2f);
-                    indicator.SetActive(false);
-                    yield return new WaitForSeconds(0.2f);
-                    indicator.SetActive(true);
-                    yield return new WaitForSeconds(0.2f);
-                    Destroy(indicator);
-                    yield return new WaitForSeconds(0.2f);
-                    var curTent = Instantiate(vulTentPref, pos, Quaternion.identity);
-                    objective.gameObject.SetActive(true);
-                    yield return new WaitForSeconds(2f);
-                    Destroy(curTent);
+                    Crack objective = _gm.GetCrack();
+                    if (objective)
+                    {
+                        StartCoroutine(SingleVulTentAttack(objective));
+                    }
                 }
             }
         }
+    }
+
+    public IEnumerator SingleVulTentAttack(Crack objective)
+    {
+        Vector3 pos = objective.transform.position;
+        var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        Destroy(indicator);
+        yield return new WaitForSeconds(0.2f);
+        var curTent = Instantiate(vulTentPref, pos, Quaternion.identity);
+        objective.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        _gm.AddToActiveCounter(1);
+        Destroy(curTent);
+    }
+
+    public IEnumerator SingleTentacleAttack(Crack objective)
+    {
+        Vector3 pos = objective.transform.position;
+        var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        Destroy(indicator);
+        yield return new WaitForSeconds(0.2f);
+        var curTent = Instantiate(tentaclePref, pos, Quaternion.identity);
+        objective.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        _gm.AddToActiveCounter(1);
+        Destroy(curTent);
     }
 
     public IEnumerator TentacleAttack()
@@ -240,23 +270,13 @@ public class MainEnemy : MonoBehaviour
             else
             {
                 yield return new WaitForSeconds(normalTentacleWaitingTime[_curLevel]);
-                Crack objective = _gm.GetCrack();
-                if (objective)
+                for (int i = 0; i < normalTentacleAttackSize[_curLevel]; i++)
                 {
-                    Vector3 pos = objective.transform.position;
-                    var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
-                    indicator.SetActive(true);
-                    yield return new WaitForSeconds(0.2f);
-                    indicator.SetActive(false);
-                    yield return new WaitForSeconds(0.2f);
-                    indicator.SetActive(true);
-                    yield return new WaitForSeconds(0.2f);
-                    Destroy(indicator);
-                    yield return new WaitForSeconds(0.2f);
-                    var curTent = Instantiate(tentaclePref, pos, Quaternion.identity);
-                    objective.gameObject.SetActive(true);
-                    yield return new WaitForSeconds(0.5f);
-                    Destroy(curTent);
+                    Crack objective = _gm.GetCrack();
+                    if (objective)
+                    {
+                        StartCoroutine(SingleTentacleAttack(objective));
+                    }
                 }
             }
         }

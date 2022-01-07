@@ -137,8 +137,9 @@ public class GManager : MonoBehaviour
 
     public void CrackFix(Crack cr)
     {
-        _inactiveCracks.Add(cr);
         activeCracksCounter--;
+        _inactiveCracks.Add(cr);
+        
     }
 
     public Crack GetCrack()
@@ -148,7 +149,7 @@ public class GManager : MonoBehaviour
             int targetInd = Random.Range(0, _inactiveCracks.Count);
             Crack target = _inactiveCracks[targetInd];
             _inactiveCracks.RemoveAt(targetInd);
-            activeCracksCounter++;
+            //activeCracksCounter++;
             return target;
         }
         return null;
@@ -174,10 +175,16 @@ public class GManager : MonoBehaviour
         //kraken.SetDizzy(true);
         //StartCoroutine(kraken.HitPenalty());
     }
-    
-    
+
+
+    public void AddToActiveCounter(int num)
+    {
+        activeCracksCounter += num;
+        Debug.Log(activeCracksCounter);
+    }
 
 }
+
 
 
 [System.Serializable]
