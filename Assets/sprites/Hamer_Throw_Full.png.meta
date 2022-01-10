@@ -1,0 +1,516 @@
+fileFormatVersion: 2
+guid: bbf4d78bc63284bcba9fe4c8817a6f1c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -550351105437947614
+    second: Hamer_Throw_Full_0
+  - first:
+      213: -2836166294075837408
+    second: Hamer_Throw_Full_1
+  - first:
+      213: 8500270663604029457
+    second: Hamer_Throw_Full_2
+  - first:
+      213: -6240660239723527667
+    second: Hamer_Throw_Full_3
+  - first:
+      213: -2837916366813871548
+    second: Hamer_Throw_Full_4
+  - first:
+      213: 2578440096238674571
+    second: Hamer_Throw_Full_5
+  - first:
+      213: -8495928038461858925
+    second: Hamer_Throw_Full_6
+  - first:
+      213: -2456961281685023609
+    second: Hamer_Throw_Full_7
+  - first:
+      213: -839940644707076090
+    second: Hamer_Throw_Full_8
+  - first:
+      213: 1743521895090656720
+    second: Hamer_Throw_Full_9
+  - first:
+      213: 4283125818711206253
+    second: Hamer_Throw_Full_10
+  - first:
+      213: -6861925005400823688
+    second: Hamer_Throw_Full_11
+  - first:
+      213: -824520912568834236
+    second: Hamer_Throw_Full_12
+  - first:
+      213: -8010392890060358705
+    second: Hamer_Throw_Full_13
+  - first:
+      213: 3569638100772520265
+    second: Hamer_Throw_Full_14
+  - first:
+      213: -2238434650309175289
+    second: Hamer_Throw_Full_15
+  - first:
+      213: -3472015326457097359
+    second: Hamer_Throw_Full_16
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.44096556, y: 0.33085775}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 229a0a2e592cc58f0800000000000000
+      internalID: -550351105437947614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_1
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.44939896, y: 0.32350373}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0247cad38c9e3a8d0800000000000000
+      internalID: -2836166294075837408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_2
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4240984, y: 0.31614974}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 118cac6d12707f570800000000000000
+      internalID: 8500270663604029457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_3
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4493987, y: 0.35291976}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d02006f8398b469a0800000000000000
+      internalID: -6240660239723527667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_4
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.45783198, y: 0.34556577}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 442cacda912bd98d0800000000000000
+      internalID: -2837916366813871548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_5
+      rect:
+        serializedVersion: 2
+        x: 1635
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.45783198, y: 0.35291976}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b822eea3b9578c320800000000000000
+      internalID: 2578440096238674571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_6
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.440965, y: 0.34556577}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39b133e5676681a80800000000000000
+      internalID: -8495928038461858925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_7
+      rect:
+        serializedVersion: 2
+        x: 2289
+        y: 750
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4662653, y: 0.33821175}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 784964a5bbe17edd0800000000000000
+      internalID: -2456961281685023609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.44096556, y: 0.3014419}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60872df0f6ee754f0800000000000000
+      internalID: -839940644707076090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_9
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.45783246, y: 0.3087959}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d59efe0deb323810800000000000000
+      internalID: 1743521895090656720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_10
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4325319, y: 0.33821183}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d69e5983d38b07b30800000000000000
+      internalID: 4283125818711206253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_11
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.46626568, y: 0.33085784}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 878a6b9409b85c0a0800000000000000
+      internalID: -6861925005400823688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_12
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4493987, y: 0.3161499}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44724783996be84f0800000000000000
+      internalID: -824520912568834236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_13
+      rect:
+        serializedVersion: 2
+        x: 1635
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.45783198, y: 0.3014419}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcb33ac7b1e55d090800000000000000
+      internalID: -8010392890060358705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_14
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.4662653, y: 0.3235039}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9410f3d90f6e98130800000000000000
+      internalID: 3569638100772520265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_15
+      rect:
+        serializedVersion: 2
+        x: 2289
+        y: 375
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.440965, y: 0.3014419}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70855679b8b7fe0e0800000000000000
+      internalID: -2238434650309175289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hamer_Throw_Full_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 327
+        height: 375
+      alignment: 9
+      pivot: {x: 0.45783255, y: 0.32350394}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17310d3c47ce0dfc0800000000000000
+      internalID: -3472015326457097359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

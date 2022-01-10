@@ -1,0 +1,555 @@
+fileFormatVersion: 2
+guid: 228bbfdb9145d1f46b2515d75d13fd1a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 185078207834740932
+    second: said_kik 1_0
+  - first:
+      213: 2905296337117261511
+    second: said_kik 1_1
+  - first:
+      213: 8420027235935945233
+    second: said_kik 1_2
+  - first:
+      213: -1709861955302434563
+    second: said_kik 1_3
+  - first:
+      213: 4517095529870294692
+    second: said_kik 1_4
+  - first:
+      213: 7244589488102633602
+    second: said_kik 1_5
+  - first:
+      213: -8094916555761505257
+    second: said_kik 1_6
+  - first:
+      213: 3597563337917045434
+    second: said_kik 1_7
+  - first:
+      213: 5946554568998638531
+    second: said_kik 1_8
+  - first:
+      213: -5188199230565811164
+    second: said_kik 1_9
+  - first:
+      213: 4146661762110798785
+    second: said_kik 1_10
+  - first:
+      213: -8131780257183322730
+    second: said_kik 1_11
+  - first:
+      213: -3828680869915974899
+    second: said_kik 1_12
+  - first:
+      213: -2882538527129336746
+    second: said_kik 1_13
+  - first:
+      213: -4653162176200315724
+    second: said_kik 1_14
+  - first:
+      213: 2493025183068519848
+    second: said_kik 1_15
+  - first:
+      213: 4459300864852375093
+    second: said_kik 1_16
+  - first:
+      213: 6753230529005140373
+    second: said_kik 1_17
+  - first:
+      213: 7045078125994300456
+    second: said_kik 1_18
+  - first:
+      213: 7684084340412077602
+    second: said_kik 1_19
+  - first:
+      213: -8250994275045948924
+    second: said_kik 1_20
+  - first:
+      213: -8417949302120445171
+    second: said_kik 1_21
+  - first:
+      213: 7677731712537975728
+    second: said_kik 1_22
+  - first:
+      213: 3184355950356264066
+    second: said_kik 1_23
+  - first:
+      213: 2251101242719453300
+    second: said_kik 1_24
+  - first:
+      213: 2619869415247745704
+    second: said_kik 1_25
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: said_kik 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c8d7a146a7819200800000000000000
+      internalID: 185078207834740932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_1
+      rect:
+        serializedVersion: 2
+        x: 867
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ce2e1d20afa15820800000000000000
+      internalID: 2905296337117261511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_2
+      rect:
+        serializedVersion: 2
+        x: 1734
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 112831de822f9d470800000000000000
+      internalID: 8420027235935945233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_3
+      rect:
+        serializedVersion: 2
+        x: 2601
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df85e336c995548e0800000000000000
+      internalID: -1709861955302434563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_4
+      rect:
+        serializedVersion: 2
+        x: 3468
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ae7c6aa372ffae30800000000000000
+      internalID: 4517095529870294692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_5
+      rect:
+        serializedVersion: 2
+        x: 4335
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 280f2e581c3f98460800000000000000
+      internalID: 7244589488102633602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_6
+      rect:
+        serializedVersion: 2
+        x: 5202
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71c286ff74419af80800000000000000
+      internalID: -8094916555761505257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_7
+      rect:
+        serializedVersion: 2
+        x: 6069
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aba938d8bcc1de130800000000000000
+      internalID: 3597563337917045434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_8
+      rect:
+        serializedVersion: 2
+        x: 6936
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c3d3a2dfd7668250800000000000000
+      internalID: 5946554568998638531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_9
+      rect:
+        serializedVersion: 2
+        x: 7803
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42c7b2eb940dff7b0800000000000000
+      internalID: -5188199230565811164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_10
+      rect:
+        serializedVersion: 2
+        x: 8670
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cb3f4617e6eb8930800000000000000
+      internalID: 4146661762110798785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_11
+      rect:
+        serializedVersion: 2
+        x: 9537
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69dad0ba0fc162f80800000000000000
+      internalID: -8131780257183322730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_12
+      rect:
+        serializedVersion: 2
+        x: 10404
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d032356b80bcddac0800000000000000
+      internalID: -3828680869915974899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_13
+      rect:
+        serializedVersion: 2
+        x: 11271
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 654041f5b7a2ff7d0800000000000000
+      internalID: -2882538527129336746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_14
+      rect:
+        serializedVersion: 2
+        x: 12138
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bceb4d77a5ac6fb0800000000000000
+      internalID: -4653162176200315724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_15
+      rect:
+        serializedVersion: 2
+        x: 13005
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8adf6e40231099220800000000000000
+      internalID: 2493025183068519848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: said_kik 1_16
+      rect:
+        serializedVersion: 2
+        x: 13872
+        y: 0
+        width: 867.64703
+        height: 730
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5363e1c928e92ed30800000000000000
+      internalID: 4459300864852375093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

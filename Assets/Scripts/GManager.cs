@@ -105,7 +105,7 @@ public class GManager : MonoBehaviour
             
             if (activeCracksCounter >= drowningThresholds[_curBatch])
             {
-                SceneManager.LoadScene("Main Menu");
+                SceneManager.LoadScene("Main Menu"); //lose screen
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

@@ -225,6 +225,7 @@ public class MainEnemy : MonoBehaviour
     {
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.transform.parent = objective.transform.parent;
         indicator.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         indicator.SetActive(false);
@@ -233,17 +234,16 @@ public class MainEnemy : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        var curTent = Instantiate(vulTentPref, pos, Quaternion.identity);
         objective.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
+        objective.StartAnAtState(1);
         _gm.AddToActiveCounter(1);
-        Destroy(curTent);
     }
 
     public IEnumerator SingleTentacleAttack(Crack objective)
     {
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.transform.parent = objective.transform.parent;
         indicator.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         indicator.SetActive(false);
@@ -252,11 +252,9 @@ public class MainEnemy : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        var curTent = Instantiate(tentaclePref, pos, Quaternion.identity);
         objective.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        objective.StartAnAtState(0);
         _gm.AddToActiveCounter(1);
-        Destroy(curTent);
     }
 
     public IEnumerator TentacleAttack()

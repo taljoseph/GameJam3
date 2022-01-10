@@ -147,16 +147,23 @@ public class ShootObj : MonoBehaviour
 
         if (GOtag.Equals("Crack"))
         {
-            other.gameObject.SetActive(false);
-            _gm.CrackFix(other.GetComponent<Crack>());
+            Crack crackScript = other.GetComponent<Crack>();
+            if (!crackScript.AnPlaying("break_a_hole_fixed") && !crackScript.AnPlaying("said_snap_hole_fixed"))
+            {
+                _gm.CrackFix(other.GetComponent<Crack>());
+                if (crackScript.GetNormalTentActive())
+                {
+                    // add 
+                }
+
+                if (crackScript.GetSpecialTentActive())
+                {
+                    _gm.AxeHitTentacle();
+                }
+                crackScript.CloseCrack();
+            }
         }
 
-        if (GOtag.Equals("Tentacle"))
-        {
-            Destroy(other.gameObject);
-            _gm.AxeHitTentacle();
-        }
-        
     }
 
     public void HandleCrackCollision(Crack crack)
