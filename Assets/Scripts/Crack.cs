@@ -8,12 +8,14 @@ using UnityEngine.Serialization;
 public class Crack : MonoBehaviour
 {
     [SerializeField] private Color _defaultColour;
+    [SerializeField] private SpriteRenderer child_sr;
     [SerializeField] private bool _inLevel = false;
     [SerializeField] private GManager _gm;
     private bool _normalTentActive = false;
     private bool _specialTentActive = false;
     private Animator _an;
     public int id;
+    private bool _closingCrack = false;
 
 
     public void Awake()
@@ -75,11 +77,13 @@ public class Crack : MonoBehaviour
     public void CloseCrack()
     {
         _an.SetTrigger("fixed");
+        _closingCrack = true;
     }
 
     public void Deactivate()
     {
         gameObject.SetActive(false);
+        _closingCrack = false;
     }
 
     public bool AnPlaying(String name)
@@ -90,5 +94,15 @@ public class Crack : MonoBehaviour
     public void StartAnAtState(int state)
     {
         _an.SetInteger("state", state);
+    }
+
+    public void SetChildSpriteActive(int val)
+    {
+        child_sr.enabled = (val == 1);
+    }
+
+    public bool IsClosingCrack()
+    {
+        return _closingCrack;
     }
 }

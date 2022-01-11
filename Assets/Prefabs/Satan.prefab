@@ -143,3 +143,8 @@ MonoBehaviour:
   timeBetweenHands: 2
   indicatorPref: {fileID: 1714526600957077443, guid: 1384e3d8bf7692d4994a8a15d6241013, type: 3}
   tentaclePref: {fileID: 8254258667246747162, guid: ccf8c1c1273d8bc4ea53274a1ae957a4, type: 3}
+  vulTentPref: {fileID: 0}
+  normalTentacleWaitingTime: []
+  specialTentacleWaitingTime: []
+  normalTentacleAttackSize: []
+  specialTentacleAttackSize: []

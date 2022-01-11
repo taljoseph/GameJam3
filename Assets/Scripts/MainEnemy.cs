@@ -235,6 +235,7 @@ public class MainEnemy : MonoBehaviour
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
         objective.gameObject.SetActive(true);
+        objective.SetChildSpriteActive(1);
         objective.StartAnAtState(1);
         _gm.AddToActiveCounter(1);
     }
@@ -253,6 +254,7 @@ public class MainEnemy : MonoBehaviour
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
         objective.gameObject.SetActive(true);
+        objective.SetChildSpriteActive(1);
         objective.StartAnAtState(0);
         _gm.AddToActiveCounter(1);
     }

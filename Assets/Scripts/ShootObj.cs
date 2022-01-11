@@ -19,12 +19,14 @@ using UnityEngine;
 public class ShootObj : MonoBehaviour
 {
     [SerializeField] private float speed = 80;
+    [SerializeField] private SpriteRenderer childSprite;
     public MainCharacter target;
     public MainCharacter source;
     private GManager _gm;
     private Rigidbody2D _rb;
     private bool _isShot = false;
     private GameObject curHolder = null;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -148,7 +150,7 @@ public class ShootObj : MonoBehaviour
         if (GOtag.Equals("Crack"))
         {
             Crack crackScript = other.GetComponent<Crack>();
-            if (!crackScript.AnPlaying("break_a_hole_fixed") && !crackScript.AnPlaying("said_snap_hole_fixed"))
+            if (!crackScript.IsClosingCrack())
             {
                 _gm.CrackFix(other.GetComponent<Crack>());
                 if (crackScript.GetNormalTentActive())
