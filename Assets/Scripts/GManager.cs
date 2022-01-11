@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -25,6 +26,7 @@ public class GManager : MonoBehaviour
     [SerializeField] private List<int> hitsPerLevel;
     private int _curHits = 0;
     private List<int> levels = new List<int>();
+    [SerializeField] private Transform camera;
     
 
 
@@ -105,7 +107,7 @@ public class GManager : MonoBehaviour
             
             if (activeCracksCounter >= drowningThresholds[_curBatch])
             {
-                SceneManager.LoadScene("Main Menu"); //lose screen
+                SceneManager.LoadScene("Lose Scene"); //lose screen
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -158,6 +160,7 @@ public class GManager : MonoBehaviour
     public void AxeHitTentacle()
     {
         _curHits++;
+        camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         if (_curHits >= hitsPerLevel[_curBatch])
         {
             _curHits = 0;
@@ -165,7 +168,7 @@ public class GManager : MonoBehaviour
             Debug.Log("advanced to next level!");
             if (_curBatch >= drowningThresholds.Count)
             {
-                SceneManager.LoadScene("Main Menu");
+                SceneManager.LoadScene("Win Scene");
             }
             kraken.AdvanceToNextLevel();
             // move to next level

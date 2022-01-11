@@ -18,5 +18,10 @@ public class Settings : MonoBehaviour
         {
             SceneManager.LoadScene("shlomiScene");
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Main Menu");
+        }
     }
 }
