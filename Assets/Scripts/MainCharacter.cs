@@ -6,79 +6,120 @@ using UnityEngine;
 public class MainCharacter : MonoBehaviour
 {
     [SerializeField] private String player; // defined for A or B
+    [SerializeField] private MainCharacter secondPlayer;
     [SerializeField] private float moveSpeed = 2;
-    [SerializeField] private KeyCode dashKey;
-    [SerializeField] private bool inDashMode = false;
-    [SerializeField] private float dashDuration;
-    [SerializeField] private int dashCooldownDuration;
     [SerializeField] private GManager gm;
-    private Vector2 direction = Vector2.zero;
+    [SerializeField] private KeyCode shootKey;
+    public GameObject axePrefab; //TODO shouldn't be prefab, also no need for instantiating and destroying all the time. 
+    private Vector2 _prevDir = Vector2.zero;
+    private Vector2 _direction = Vector2.zero;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
-    private bool _canDash = true;
     private bool _dizzy = false;
+    private bool _isDead = false;
+    [SerializeField] private float tentacleHitDuration = 1f;
+    [SerializeField] private bool hasAxe = true;
+    private Animator _an;
+    private bool _isFlipped = false;
+    private GameObject _axeObj;
+    private Collider2D _col;
+    private bool _isInvincibile = false; 
+    
+    
+
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+        _an = GetComponent<Animator>();
+        _col = GetComponent<Collider2D>();
+        _axeObj = gameObject.transform.GetChild(0).gameObject;
+        if (player.Equals("B"))
+        {
+            gameObject.transform.Rotate(Vector3.up * 180);
+            _isFlipped = true;
+        }
     }
 
     void Update()
     {
-        GetDirection();
-        if (Input.GetKeyDown(dashKey) && _canDash)
+        if (!_isDead)
         {
-            StartCoroutine(Dash());
+            GetDirection();
+            if (Input.GetKeyDown(shootKey))
+            {
+                if (hasAxe && !secondPlayer._isDead)
+                {
+                    _axeObj.SetActive(false);
+                    ShootAxe(this , secondPlayer);
+                }
+            }
         }
+        
+        // if (_direction.x != 0 || _direction.y != 0)
+        // {
+        //     if (!_isWalking)
+        //     {
+        //         _isWalking = true;
+        //         _an.SetBool("isWalking", true);
+        //     }
+        //
+        //     if (!_srFlipped && _direction.x == 1f)
+        //     {
+        //         _srFlipped = false;
+        //         _sr.flipX = true;
+        //     }
+        // }
+        // else
+        // {
+        //     if (_isWalking)
+        //     {
+        //         _isWalking = false;
+        //         _an.SetBool("isWalking", false);
+        //     }
+        // }
+
     }
 
     private void FixedUpdate()
     {
-        Move();
-    }
-
-    private IEnumerator Dash()
-    {
-        _sr.color = Color.magenta;
-        inDashMode = true;
-        _canDash = false;
-        yield return new WaitForSeconds(dashDuration); // dash duration
-        _sr.color = Color.blue;
-        inDashMode = false;
-        //  TODO : should show the user that he is in dash cooldown
-        yield return new WaitForSeconds(dashCooldownDuration); // dash cooldown
-        _canDash = true;
+        if (!_isDead)
+        {
+            Move();
+        }
     }
 
     void GetDirection()
     {
         float x = Input.GetAxisRaw("Horizontal_" + player);
         float y = Input.GetAxisRaw("Vertical_" + player);
-        if (!inDashMode)
+        _prevDir = _direction;
+        _direction = new Vector2(x, y);
+        if (_direction != _prevDir)
         {
-            direction = new Vector2(x, y).normalized;
+            _an.SetInteger("x", (int) _direction.x);
+            _an.SetInteger("y", (int) _direction.y);
         }
+
+        if (_direction.x == 1 && !_isFlipped)
+        {
+            gameObject.transform.Rotate(Vector3.up * 180);
+            _isFlipped = true;
+        }
+        else if (_direction.x == -1 && _isFlipped)
+        {
+            gameObject.transform.Rotate(Vector3.up * 180);
+            _isFlipped = false;
+        }
+        _direction.Normalize();
     }
 
     void Move()
     {
-        if (!inDashMode)
-        {
-            _rb.velocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed);
-        }
-
-        if (inDashMode)
-        {
-            _rb.velocity = new Vector2(direction.x * moveSpeed *2, direction.y * moveSpeed *2);
-        }
+        _rb.velocity = new Vector2(_direction.x * moveSpeed, _direction.y * moveSpeed);
     }
 
-    public bool IsInDashMode()
-    {
-        return inDashMode;
-    }
-    
     public void SetSpeed(float val)
     {
         moveSpeed = val;
@@ -96,10 +137,78 @@ public class MainCharacter : MonoBehaviour
             _dizzy = true;
             gm.DizzyStat(this);
         }
+        
+        
+        if (!_isInvincibile && other.transform.tag.Equals("Crack"))
+        {
+            Crack crackScript = other.gameObject.GetComponent<Crack>();
+            if (crackScript.GetNormalTentActive() || crackScript.GetSpecialTentActive())
+            {
+                // float bounce = 300f; //amount of force to apply
+                // _rb.AddForce(other.contacts[0].normal * bounce);
+                gm.CharacterDied(this, _col, _rb, _an);
+            }
+        }
+        
+        
+        // if (other.gameObject.tag.Equals("PointsActivator"))
+        // {
+        //     
+        // }
+    }
+
+    public void SetHasAxe(bool val)
+    {
+        _axeObj.SetActive(val);
+        hasAxe = val;
+    }
+
+    public bool HasAxe()
+    {
+        return hasAxe;
     }
 
     public void SetDizzy(bool val)
     {
         _dizzy = val;
     }
+    
+    public void ShootAxe(MainCharacter source,MainCharacter dest)
+    {
+        var axe = Instantiate(axePrefab, source.transform.position, Quaternion.identity);
+        hasAxe = false;
+        gm.AxeShot(axe);
+        var shootScript = axe.GetComponent<ShootObj>();
+        shootScript.SetHolder(gameObject);
+        shootScript.SetSource(source);
+        shootScript.SetTarget(dest);
+        shootScript.SetLayer(0);
+    }
+
+    public void Freeze(bool val)
+    {
+        _isDead = val;
+        _rb.velocity = Vector2.zero;
+    }
+
+    public bool IsDead()
+    {
+        return _isDead;
+    }
+
+    public void SetDead(bool val)
+    {
+        _isDead = val;
+    }
+
+    public void HitPenalty()
+    {
+        gm.CharHitPenalty(this, gameObject, _sr, _col, secondPlayer.transform);
+    }
+
+    public void SetInvincible(bool val)
+    {
+        _isInvincibile = val;
+    }
+
 }

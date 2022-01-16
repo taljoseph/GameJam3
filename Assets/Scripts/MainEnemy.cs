@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Newtonsoft.Json.Serialization;
 using UnityEngine.Serialization;
+using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
 
 public class MainEnemy : MonoBehaviour
@@ -20,20 +21,33 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private float timeBetweenMinions = 10f;
     [SerializeField] private float timeBetweenSwipeAttacks = 20f;
     [SerializeField] private Vector3 shootingDirection;
-    private List<Point> _minionTargets;
+    private List<Crack> _minionTargets;
     public List<Minion> _minions = new List<Minion>();
     private bool _areMinionsActive;
-    [FormerlySerializedAs("handA")] [SerializeField] private Transform handR;
-    [FormerlySerializedAs("handB")] [SerializeField] private Transform handL;
+
+    [FormerlySerializedAs("handA")] [SerializeField]
+    private Transform handR;
+
+    [FormerlySerializedAs("handB")] [SerializeField]
+    private Transform handL;
+
     private bool _rotateRight = false;
     private bool _rotateLeft = false;
-    private Quaternion _defRotationRight; 
-    private Quaternion _defRotationLeft; 
+    private Quaternion _defRotationRight;
+    private Quaternion _defRotationLeft;
     private bool handAttack = false;
     [SerializeField] private float handSpeed = 90;
     [SerializeField] private float timeBetweenHands = 2;
-    
-    
+    [SerializeField] private GameObject indicatorPref;
+    [SerializeField] private GameObject tentaclePref;
+    [SerializeField] private GameObject vulTentPref;
+    private bool dizzy = false;
+    private int _curLevel = 0;
+    [SerializeField] private List<float> normalTentacleWaitingTime;
+    [SerializeField] private List<float> specialTentacleWaitingTime;
+    [SerializeField] private List<float> normalTentacleAttackSize;
+    [SerializeField] private List<float> specialTentacleAttackSize;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,15 +56,19 @@ public class MainEnemy : MonoBehaviour
         GameObject borders = _gm.GetBorders();
         for (int i = 0; i < borders.transform.childCount; i++)
         {
-            Physics2D.IgnoreCollision(handR.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
-            Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(), borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
+            Physics2D.IgnoreCollision(handR.GetChild(0).GetComponent<Collider2D>(),
+                borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
+            Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(),
+                borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
         }
-        StartCoroutine(SimpleShot());
-        StartCoroutine(SendMinions());
+
+        StartCoroutine(TentacleAttack());
+        StartCoroutine(VulTentAttack());
+        // StartCoroutine(SimpleShot());
+        // StartCoroutine(SendMinions());
         StartCoroutine(HandAttack());
     }
-    
-    
+
 
     // Update is called once per frame
 
@@ -59,7 +77,7 @@ public class MainEnemy : MonoBehaviour
     {
         _minionTargets = _gm.GetRandomTargets();
     }
-    
+
     private IEnumerator SendMinions()
     {
         while (true)
@@ -95,10 +113,12 @@ public class MainEnemy : MonoBehaviour
         {
             Destroy(_minions[1].gameObject);
         }
+
         if (_minions.Count >= 1 && _minions[0] != null)
         {
             Destroy(_minions[0].gameObject);
         }
+
         _minions.Clear();
         _areMinionsActive = false;
     }
@@ -118,7 +138,7 @@ public class MainEnemy : MonoBehaviour
                 SetShootingDirection();
                 InitBullet();
             }
-            
+
             yield return new WaitForSeconds(timeBetweenShots);
         }
     }
@@ -136,10 +156,9 @@ public class MainEnemy : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenHands);
             handAttack = true;
-            _gm.MinionGotHit(); // TODO yellow point bug maybe? 
-            int shakeTime = 3;
-            GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
-            yield return new WaitForSeconds(shakeTime);
+            // int shakeTime = 3;
+            // GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+            // yield return new WaitForSeconds(shakeTime);
             // handA.GetComponent<Rigidbody2D>().DORotate(270f, 3.5f);
             _rotateRight = true;
             yield return new WaitForSeconds(timeBetweenHands);
@@ -148,22 +167,22 @@ public class MainEnemy : MonoBehaviour
             yield return new WaitForSeconds(2);
             handAttack = false;
         }
-        
     }
 
     public void FixedUpdate()
     {
         if (_rotateRight)
         {
-            if (handR.rotation.eulerAngles.z > (_defRotationRight.eulerAngles.z + 180) % 360 && 
+            if (handR.rotation.eulerAngles.z > (_defRotationRight.eulerAngles.z + 180) % 360 &&
                 handR.rotation.eulerAngles.z < _defRotationRight.eulerAngles.z)
             {
                 _rotateRight = false;
                 handR.rotation = _defRotationRight;
             }
-            
 
-            handR.rotation = Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * handSpeed * Time.deltaTime);
+
+            handR.rotation =
+                Quaternion.Euler(handR.rotation.eulerAngles + Vector3.forward * handSpeed * Time.deltaTime);
         }
 
         if (_rotateLeft)
@@ -173,8 +192,110 @@ public class MainEnemy : MonoBehaviour
                 _rotateLeft = false;
                 handL.rotation = _defRotationLeft;
             }
-            handL.rotation = Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
 
+            handL.rotation =
+                Quaternion.Euler(handL.rotation.eulerAngles + Vector3.forward * -handSpeed * Time.deltaTime);
         }
+    }
+
+    public IEnumerator VulTentAttack()
+    {
+        while (true)
+        {
+            if (dizzy)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                yield return new WaitForSeconds(specialTentacleWaitingTime[_curLevel]);
+                for (int i = 0; i < specialTentacleAttackSize[_curLevel]; i++)
+                {
+                    Crack objective = _gm.GetCrack();
+                    if (objective)
+                    {
+                        StartCoroutine(SingleVulTentAttack(objective));
+                    }
+                }
+            }
+        }
+    }
+
+    public IEnumerator SingleVulTentAttack(Crack objective)
+    {
+        Vector3 pos = objective.transform.position;
+        var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.transform.parent = objective.transform.parent;
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        Destroy(indicator);
+        yield return new WaitForSeconds(0.2f);
+        objective.gameObject.SetActive(true);
+        objective.SetChildSpriteActive(1);
+        objective.StartAnAtState(1);
+        _gm.AddToActiveCounter(1);
+    }
+
+    public IEnumerator SingleTentacleAttack(Crack objective)
+    {
+        Vector3 pos = objective.transform.position;
+        var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
+        indicator.transform.parent = objective.transform.parent;
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        indicator.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        Destroy(indicator);
+        yield return new WaitForSeconds(0.2f);
+        objective.gameObject.SetActive(true);
+        objective.SetChildSpriteActive(1);
+        objective.StartAnAtState(0);
+        _gm.AddToActiveCounter(1);
+    }
+
+    public IEnumerator TentacleAttack()
+    {
+        while (true)
+        {
+            if (dizzy)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                yield return new WaitForSeconds(normalTentacleWaitingTime[_curLevel]);
+                for (int i = 0; i < normalTentacleAttackSize[_curLevel]; i++)
+                {
+                    Crack objective = _gm.GetCrack();
+                    if (objective)
+                    {
+                        StartCoroutine(SingleTentacleAttack(objective));
+                    }
+                }
+            }
+        }
+    }
+
+    public IEnumerator HitPenalty()
+    {
+        yield return new WaitForSeconds(5);
+        dizzy = false;
+    }
+
+
+    public void SetDizzy(bool val)
+    {
+        dizzy = val;
+    }
+
+    public void AdvanceToNextLevel()
+    {
+        _curLevel++;
     }
 }

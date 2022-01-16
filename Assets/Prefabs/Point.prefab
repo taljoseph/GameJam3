@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9256bfd3f87f2df48bb5a7f890220329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point: {fileID: 8980051589887777781}
+  crack: {fileID: 0}
   _gm: {fileID: 0}
 --- !u!1 &8980051589724291947
 GameObject:
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5d91b2616da864c9766e70089d0e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point: {fileID: 8980051589887777781}
+  crack: {fileID: 0}
   _gm: {fileID: 0}
 --- !u!1 &8980051589887777785
 GameObject:
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a554814230536604ba807c05a2b0dab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultColour: {r: 0, g: 0, b: 0, a: 0}
+  _inLevel: 0
   _gm: {fileID: 0}
-  _playerAnimator: {fileID: 8980051589724291940}
-  _minionAnimator: {fileID: 3106166944418047389}
   id: 0
