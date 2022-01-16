@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class GManager : MonoBehaviour
 {
@@ -27,6 +29,8 @@ public class GManager : MonoBehaviour
     private int _curHits = 0;
     private List<int> levels = new List<int>();
     [SerializeField] private Transform camera;
+    private GameObject _curAxe = null;
+    [SerializeField] private float characterSpawnTime = 3;
     
 
 
@@ -116,25 +120,25 @@ public class GManager : MonoBehaviour
             }            
         }
 
+        camera.transform.rotation = Quaternion.Euler(
+            Mathf.Sin(Time.realtimeSinceStartup),
+            0, 
+            Mathf.Sin(Time.realtimeSinceStartup) * 0.5f);
     }
-
-    
 
     public GameObject GetBorders()
     {
         return borders;
     }
 
-    public void AxeShot()
+    public void AxeShot(GameObject obj)
     {
-        p1.Freeze(true);
-        p2.Freeze(true);
+        _curAxe = obj;
     }
 
     public void AxeHitPlayer()
     {
-        p1.Freeze(false);
-        p2.Freeze(false);
+        _curAxe = null;
     }
 
     public void CrackFix(Crack cr)
@@ -186,6 +190,43 @@ public class GManager : MonoBehaviour
         Debug.Log(activeCracksCounter);
     }
 
+    public void CharacterDied(MainCharacter playerScript, Collider2D col, Rigidbody2D rb, Animator an)
+    {
+        playerScript.SetDead(true);
+        col.enabled = false;
+        an.SetTrigger("hit");
+        rb.velocity = Vector2.zero;
+        if (_curAxe != null) // Axe was thrown 
+        {
+            Destroy(_curAxe);
+            _curAxe = null;
+        }
+        MainCharacter handAxeTo = playerScript.Equals(p1) ? p2 : p1;
+        handAxeTo.SetHasAxe(true);
+        playerScript.SetHasAxe(false);
+    }
+
+    public void CharHitPenalty(MainCharacter playerScript, GameObject playerGO, SpriteRenderer sr, Collider2D col, Transform p2Trans)
+    {
+        playerGO.SetActive(false);
+        StartCoroutine(CharacterRespawn(playerScript, playerGO, sr, col, p2Trans));
+    }
+    
+    public IEnumerator CharacterRespawn(MainCharacter playerScript, GameObject playerGO, SpriteRenderer sr, Collider2D col, Transform p2Trans)
+    {
+        yield return new WaitForSeconds(characterSpawnTime);
+        playerGO.SetActive(true);
+        playerScript.SetInvincible(true);
+        playerGO.transform.position = p2Trans.position;
+        col.enabled = true;
+        playerScript.SetDead(false);
+        for (int i = 0; i < 14; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            sr.enabled = !sr.enabled;
+        }
+        playerScript.SetInvincible(false);
+    }
 }
 
 

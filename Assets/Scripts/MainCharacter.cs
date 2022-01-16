@@ -16,12 +16,15 @@ public class MainCharacter : MonoBehaviour
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private bool _dizzy = false;
-    private bool _frozen = false;
+    private bool _isDead = false;
     [SerializeField] private float tentacleHitDuration = 1f;
     [SerializeField] private bool hasAxe = true;
     private Animator _an;
     private bool _isFlipped = false;
-    private GameObject _axeObj; 
+    private GameObject _axeObj;
+    private Collider2D _col;
+    private bool _isInvincibile = false; 
+    
     
 
 
@@ -30,6 +33,7 @@ public class MainCharacter : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _an = GetComponent<Animator>();
+        _col = GetComponent<Collider2D>();
         _axeObj = gameObject.transform.GetChild(0).gameObject;
         if (player.Equals("B"))
         {
@@ -40,18 +44,19 @@ public class MainCharacter : MonoBehaviour
 
     void Update()
     {
-        if (!_frozen)
+        if (!_isDead)
         {
             GetDirection();
-        }
-        if (Input.GetKeyDown(shootKey))
-        {
-            if (hasAxe)
+            if (Input.GetKeyDown(shootKey))
             {
-                _axeObj.SetActive(false);
-                ShootAxe(this , secondPlayer);
+                if (hasAxe && !secondPlayer._isDead)
+                {
+                    _axeObj.SetActive(false);
+                    ShootAxe(this , secondPlayer);
+                }
             }
         }
+        
         // if (_direction.x != 0 || _direction.y != 0)
         // {
         //     if (!_isWalking)
@@ -79,7 +84,7 @@ public class MainCharacter : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_frozen)
+        if (!_isDead)
         {
             Move();
         }
@@ -134,15 +139,14 @@ public class MainCharacter : MonoBehaviour
         }
         
         
-        if (other.transform.tag.Equals("Crack"))
+        if (!_isInvincibile && other.transform.tag.Equals("Crack"))
         {
             Crack crackScript = other.gameObject.GetComponent<Crack>();
             if (crackScript.GetNormalTentActive() || crackScript.GetSpecialTentActive())
             {
-                float bounce = 300f; //amount of force to apply
-                _rb.AddForce(other.contacts[0].normal * bounce);
-                _frozen = true;
-                StartCoroutine(TentacleHit());   
+                // float bounce = 300f; //amount of force to apply
+                // _rb.AddForce(other.contacts[0].normal * bounce);
+                gm.CharacterDied(this, _col, _rb, _an);
             }
         }
         
@@ -155,14 +159,13 @@ public class MainCharacter : MonoBehaviour
 
     public void SetHasAxe(bool val)
     {
-        _axeObj.SetActive(true);
+        _axeObj.SetActive(val);
         hasAxe = val;
     }
-    
-    private IEnumerator TentacleHit()
+
+    public bool HasAxe()
     {
-        yield return new WaitForSeconds(tentacleHitDuration);
-        _frozen = false;
+        return hasAxe;
     }
 
     public void SetDizzy(bool val)
@@ -173,19 +176,39 @@ public class MainCharacter : MonoBehaviour
     public void ShootAxe(MainCharacter source,MainCharacter dest)
     {
         var axe = Instantiate(axePrefab, source.transform.position, Quaternion.identity);
+        hasAxe = false;
+        gm.AxeShot(axe);
         var shootScript = axe.GetComponent<ShootObj>();
         shootScript.SetHolder(gameObject);
         shootScript.SetSource(source);
         shootScript.SetTarget(dest);
         shootScript.SetLayer(0);
-        hasAxe = false;
-        //gm.AxeShot();
     }
 
     public void Freeze(bool val)
     {
-        _frozen = val;
+        _isDead = val;
         _rb.velocity = Vector2.zero;
+    }
+
+    public bool IsDead()
+    {
+        return _isDead;
+    }
+
+    public void SetDead(bool val)
+    {
+        _isDead = val;
+    }
+
+    public void HitPenalty()
+    {
+        gm.CharHitPenalty(this, gameObject, _sr, _col, secondPlayer.transform);
+    }
+
+    public void SetInvincible(bool val)
+    {
+        _isInvincibile = val;
     }
 
 }

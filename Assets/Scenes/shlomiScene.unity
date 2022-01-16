@@ -15375,9 +15375,10 @@ MonoBehaviour:
   speedPenaltyTimer: 5
   p1: {fileID: 1810946487}
   p2: {fileID: 762596446}
-  drowningThresholds: 0f000000140000001e000000
+  drowningThresholds: 640000006400000064000000
   hitsPerLevel: 030000000300000003000000
   camera: {fileID: 1945819631}
+  characterSpawnTime: 3
 --- !u!4 &1998750260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8980051589887777784, guid: 92d63572f20121641bbc54d5e19213cd, type: 3}
@@ -15459,7 +15460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016800936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0603, y: -1.1071, z: 0}
+  m_LocalPosition: {x: 0, y: -1.1071, z: 0}
   m_LocalScale: {x: 0.5061, y: 0.5074248, z: 0.5061}
   m_Children: []
   m_Father: {fileID: 0}
@@ -16321,7 +16322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1708674707404843174, guid: 4a51b3b86677c1b40aab8acfe6612443, type: 3}
       propertyPath: normalTentacleWaitingTime.Array.data[0]
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1708674707404843174, guid: 4a51b3b86677c1b40aab8acfe6612443, type: 3}
       propertyPath: normalTentacleWaitingTime.Array.data[1]
@@ -16329,7 +16330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1708674707404843174, guid: 4a51b3b86677c1b40aab8acfe6612443, type: 3}
       propertyPath: normalTentacleWaitingTime.Array.data[2]
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1708674707404843174, guid: 4a51b3b86677c1b40aab8acfe6612443, type: 3}
       propertyPath: specialTentacleAttackSize.Array.data[0]

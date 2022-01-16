@@ -143,6 +143,7 @@ public class ShootObj : MonoBehaviour
             {
                 //_gm.AxeHitPlayer();
                 player.SetHasAxe(true);
+                _gm.AxeHitPlayer();
                 Destroy(gameObject);
             }
         }
@@ -160,6 +161,7 @@ public class ShootObj : MonoBehaviour
 
                 if (crackScript.GetSpecialTentActive())
                 {
+                    other.gameObject.GetComponent<Animator>().SetTrigger("hit"); //TODO change place maybe?
                     _gm.AxeHitTentacle();
                 }
                 crackScript.CloseCrack();
