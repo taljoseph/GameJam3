@@ -24,7 +24,7 @@ public class MainEnemy : MonoBehaviour
     private List<Crack> _minionTargets;
     public List<Minion> _minions = new List<Minion>();
     private bool _areMinionsActive;
-
+    
     [FormerlySerializedAs("handA")] [SerializeField]
     private Transform handR;
 
@@ -47,6 +47,7 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private List<float> specialTentacleWaitingTime;
     [SerializeField] private List<float> normalTentacleAttackSize;
     [SerializeField] private List<float> specialTentacleAttackSize;
+    [SerializeField] private Animator eyeAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -297,5 +298,18 @@ public class MainEnemy : MonoBehaviour
     public void AdvanceToNextLevel()
     {
         _curLevel++;
+        eyeAnimator.SetTrigger("Transition");
+        
     }
+
+    public void HitTentacleAnimation()
+    {
+        eyeAnimator.SetTrigger("hitEye");
+    }
+
+    public void MoveToNextLevelAnimation()
+    {
+        eyeAnimator.SetTrigger("Angry");
+    }
+    
 }

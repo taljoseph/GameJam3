@@ -185,8 +185,10 @@ public class GManager : MonoBehaviour
 
     public void AxeHitTentacle()
     {
+        
         _curHits++;
         camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+        kraken.HitTentacleAnimation();
         if (_curHits >= hitsPerLevel[_curBatch])
         {
             _curHits = 0;
