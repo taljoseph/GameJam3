@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -25,12 +26,17 @@ public class GManager : MonoBehaviour
     [SerializeField] private MainCharacter p1;
     [SerializeField] private MainCharacter p2;
     [SerializeField] private List<int> drowningThresholds;
+    [SerializeField] private List<float> drowningOpenRates;
+    [SerializeField] private List<float> drowningCloseRates;
     [SerializeField] private List<int> hitsPerLevel;
     private int _curHits = 0;
     private List<int> levels = new List<int>();
     [SerializeField] private Transform camera;
     private GameObject _curAxe = null;
     [SerializeField] private float characterSpawnTime = 3;
+    [SerializeField] private float drowningRate = 0;
+    [SerializeField] private float shipDrowningCondition = 0;
+    [SerializeField] private Image shipDrowningBar;
     
 
 
@@ -108,6 +114,21 @@ public class GManager : MonoBehaviour
         if (_curBatch <= drowningThresholds.Count - 1)
         {
             //Debug.Log(_curBatch);
+            if (shipDrowningCondition < 1)
+            {
+                shipDrowningCondition += Time.deltaTime * drowningRate;
+                shipDrowningCondition = Mathf.Max(shipDrowningCondition, 0);
+                if (shipDrowningCondition <= 0)
+                {
+                    drowningRate = 0;
+                }
+                shipDrowningBar.fillAmount = shipDrowningCondition;
+                if (shipDrowningCondition >= 1)
+                {
+                    SceneManager.LoadScene("Lose Scene"); //lose screen
+                }
+            }
+            
             
             if (activeCracksCounter >= drowningThresholds[_curBatch])
             {
@@ -143,6 +164,7 @@ public class GManager : MonoBehaviour
 
     public void CrackFix(Crack cr)
     {
+        drowningRate -= drowningCloseRates[_curBatch];
         activeCracksCounter--;
         _inactiveCracks.Add(cr);
         
@@ -163,8 +185,10 @@ public class GManager : MonoBehaviour
 
     public void AxeHitTentacle()
     {
+        
         _curHits++;
         camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+        kraken.HitTentacleAnimation();
         if (_curHits >= hitsPerLevel[_curBatch])
         {
             _curHits = 0;
@@ -186,6 +210,7 @@ public class GManager : MonoBehaviour
 
     public void AddToActiveCounter(int num)
     {
+        drowningRate += drowningOpenRates[_curBatch];
         activeCracksCounter += num;
         Debug.Log(activeCracksCounter);
     }

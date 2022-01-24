@@ -105,4 +105,6 @@ public class Crack : MonoBehaviour
     {
         return _closingCrack;
     }
+
+    
 }

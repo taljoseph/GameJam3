@@ -132,14 +132,19 @@ public class MainCharacter : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.transform.tag.Equals("Hand") && _dizzy == false)
+        var curTag = other.transform.tag;
+        // if (curTag.Equals("Hand") && _dizzy == false)
+        // {
+        //     _dizzy = true;
+        //     gm.DizzyStat(this);
+        // }
+
+        if (!_isInvincibile && curTag.Equals("Hand"))
         {
-            _dizzy = true;
-            gm.DizzyStat(this);
+            gm.CharacterDied(this, _col, _rb, _an);
         }
         
-        
-        if (!_isInvincibile && other.transform.tag.Equals("Crack"))
+        else if (!_isInvincibile && curTag.Equals("Crack"))
         {
             Crack crackScript = other.gameObject.GetComponent<Crack>();
             if (crackScript.GetNormalTentActive() || crackScript.GetSpecialTentActive())

@@ -47,6 +47,11 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private List<float> specialTentacleWaitingTime;
     [SerializeField] private List<float> normalTentacleAttackSize;
     [SerializeField] private List<float> specialTentacleAttackSize;
+    [SerializeField] private Animator eyeAnimator;
+    [SerializeField] private Animator bodyAnimator;
+    private bool _angry = false;
+    // private float _totalAngryTime = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -61,7 +66,17 @@ public class MainEnemy : MonoBehaviour
             Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(),
                 borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
         }
-
+        
+        
+        // AnimationClip[] clips = eyeAnimator.runtimeAnimatorController.animationClips;
+        // foreach (AnimationClip clip in clips)
+        // {
+        //     if (clip.name.Equals("Angry-Eye") || clip.name.Equals("Angry-Transition"))
+        //     {
+        //         _totalAngryTime += clip.length;
+        //     }
+        // }
+        
         StartCoroutine(TentacleAttack());
         StartCoroutine(VulTentAttack());
         // StartCoroutine(SimpleShot());
@@ -154,7 +169,10 @@ public class MainEnemy : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(timeBetweenHands);
+            yield return new WaitForSeconds(timeBetweenSwipeAttacks);
+            eyeAnimator.SetTrigger("Angry");
+            _angry = true;
+            yield return new WaitForSeconds(2);
             handAttack = true;
             // int shakeTime = 3;
             // GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
@@ -187,6 +205,12 @@ public class MainEnemy : MonoBehaviour
 
         if (_rotateLeft)
         {
+            if (_angry && handL.rotation.eulerAngles.z <= _defRotationLeft.eulerAngles.z - 90)
+            {
+                _angry = false;
+                eyeAnimator.SetTrigger("StopAngry");
+            }
+            
             if (handL.rotation.eulerAngles.z < (_defRotationLeft.eulerAngles.z - 180))
             {
                 _rotateLeft = false;
@@ -297,5 +321,20 @@ public class MainEnemy : MonoBehaviour
     public void AdvanceToNextLevel()
     {
         _curLevel++;
+        bodyAnimator.SetTrigger("Rise");
+        // TODO:
+        // 1. Stop all coroutines
+        // 2. Calculate kraken going up and down animation time (in "Start")
+        // 3. Use coroutine to wait the time above
+        // 4. Resume all coroutines
     }
+
+    public void HitTentacleAnimation()
+    {
+        if (!_angry)
+        {
+            eyeAnimator.SetTrigger("hitEye");
+        }
+    }
+
 }

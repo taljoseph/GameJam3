@@ -290,7 +290,6 @@ public class TutME : MonoBehaviour
 
         Crack abc = _gm.GetCrackAt(3);
         Animator anObj = abc.gameObject.GetComponent<Animator>();
-        anObj.SetFloat("state", 10);
         StartCoroutine(SingleVulTentAttack(abc));
         _gm.TutAttack1End();
     }
