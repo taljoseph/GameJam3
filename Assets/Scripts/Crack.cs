@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 public class Crack : MonoBehaviour
@@ -16,12 +17,21 @@ public class Crack : MonoBehaviour
     private Animator _an;
     public int id;
     private bool _closingCrack = false;
+    private SpriteRenderer _sr;
+    private Collider2D _col;
+    [SerializeField] private ParticleSystem _waterParticles;
+    [SerializeField] private ParticleSystem _smokeParticles;
+    [SerializeField] private ParticleSystem _woodParticles;
+    [SerializeField] private float splashWaitingTime = 3;
+    [SerializeField] private SoundManager sm;
 
 
     public void Awake()
     {
         _defaultColour = GetComponent<SpriteRenderer>().color;
         _an = GetComponent<Animator>();
+        _sr = GetComponent<SpriteRenderer>();
+        _col = GetComponent<Collider2D>();
         // _animator.Play("timer");
     }
 
@@ -77,13 +87,45 @@ public class Crack : MonoBehaviour
     public void CloseCrack()
     {
         _an.SetTrigger("fixed");
+        sm.PlaySound("crackClose");
         _closingCrack = true;
     }
 
     public void Deactivate()
     {
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
+        _an.enabled = false;
+        _sr.enabled = false;
+        _col.enabled = false;
         _closingCrack = false;
+        if (_waterParticles.isPlaying)
+        {
+            _waterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+        else
+        {
+            StopCoroutine("SplashWater");
+        }
+    }
+
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+        _an.enabled = true;
+        _an.Rebind();
+        _sr.enabled = true;
+        _col.enabled = true;
+        _smokeParticles.Play();
+        _woodParticles.Play();
+        // child_sr.enabled = true;
+        sm.PlaySound("crackOpen");
+        StartCoroutine("SplashWater");
+    }
+
+    private IEnumerator SplashWater()
+    {
+        yield return new WaitForSeconds(splashWaitingTime);
+        _waterParticles.Play();
     }
 
     public bool AnPlaying(String name)
@@ -106,5 +148,5 @@ public class Crack : MonoBehaviour
         return _closingCrack;
     }
 
-    
+
 }

@@ -211,13 +211,13 @@ ParticleSystem:
   serializedVersion: 7
   lengthInSec: 0.2
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -5161,7 +5161,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -10034,13 +10034,13 @@ ParticleSystem:
   serializedVersion: 7
   lengthInSec: 0.2
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -14885,14 +14885,13 @@ GameObject:
   - component: {fileID: 8980051589887777781}
   - component: {fileID: 7974587825750996895}
   - component: {fileID: 3335574967940430814}
-  - component: {fileID: 4326781257823321231}
   m_Layer: 6
   m_Name: newPoint
   m_TagString: Crack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8980051589887777784
 Transform:
   m_ObjectHideFlags: 0
@@ -14978,6 +14977,10 @@ MonoBehaviour:
   _inLevel: 0
   _gm: {fileID: 0}
   id: 0
+  _waterParticles: {fileID: 4572906194769046077}
+  _smokeParticles: {fileID: 4279759189358067467}
+  _woodParticles: {fileID: 4833163744343544521}
+  splashWaitingTime: 100
 --- !u!58 &7974587825750996895
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -15013,60 +15016,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!60 &4326781257823321231
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8980051589887777785}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.35, y: 0.02}
-    oldSize: {x: 5.4714284, y: 13.642858}
-    newSize: {x: 5.4714284, y: 13.642858}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.46525776, y: -2.9342232}
-      - {x: 0.61214674, y: -2.8355587}
-      - {x: 0.64725083, y: -2.8093178}
-      - {x: -0.011709154, y: -2.258907}
-      - {x: -0.3571225, y: -2.1426902}
-      - {x: -0.8187532, y: -1.6689599}
-      - {x: -1.4163678, y: -1.1393377}
-      - {x: -1.4173875, y: -1.1744413}
-      - {x: -1.4305083, y: -1.6033586}
-      - {x: -1.6457735, y: -1.4873152}
-      - {x: -1.88345, y: -1.2478861}
-      - {x: -1.7210503, y: -1.7667788}
-      - {x: -2.0248876, y: -1.5823952}
-      - {x: -1.7834154, y: -2.0496526}
-      - {x: -1.8328352, y: -2.234882}
-      - {x: -2.200232, y: -2.039594}
-      - {x: -2.2704403, y: -2.0932705}
-      - {x: -2.115884, y: -2.2401595}
-      - {x: -1.7909119, y: -2.4685361}
-      - {x: -1.4218199, y: -2.7401302}
-      - {x: -1.2606153, y: -2.509738}
-      - {x: -0.93664783, y: -2.8550482}
-      - {x: -0.7770012, y: -3.006647}
-      - {x: -0.21892239, y: -3.3859699}
-      - {x: -0.10048952, y: -3.3760858}
-      - {x: 0.30848473, y: -3.6129506}
-      - {x: 0.45435324, y: -3.8838995}
-      - {x: 0.55523396, y: -3.8838995}
-      - {x: 0.5552338, y: -3.8838995}
-      - {x: 0.43015364, y: -3.665607}
-      - {x: 0.36982948, y: -3.5812578}
-      - {x: 0.16040069, y: -2.8914511}

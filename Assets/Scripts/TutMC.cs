@@ -28,8 +28,9 @@ public class TutMC : MonoBehaviour
     private bool _frozen = false;
     private Vector3 _originalPos;
     private Quaternion _originalRot;
-    
-    
+    [SerializeField] private SoundManager sm;
+
+
 
 
     void Start()

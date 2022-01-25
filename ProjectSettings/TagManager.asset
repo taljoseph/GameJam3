@@ -12,6 +12,8 @@ TagManager:
   - Point
   - Hand
   - Crack
+  - Tentacle
+  - Burst
   layers:
   - Default
   - TransparentFX

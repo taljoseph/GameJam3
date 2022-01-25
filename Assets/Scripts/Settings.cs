@@ -16,7 +16,7 @@ public class Settings : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("shlomiScene");
+            SceneManager.LoadScene("Tutorial");
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

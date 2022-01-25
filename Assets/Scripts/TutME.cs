@@ -47,7 +47,11 @@ public class TutME : MonoBehaviour
     [SerializeField] private List<float> specialTentacleWaitingTime;
     [SerializeField] private List<float> normalTentacleAttackSize;
     [SerializeField] private List<float> specialTentacleAttackSize;
-
+    [SerializeField] private Animator eyeAnimator;
+    [SerializeField] private Animator bodyAnimator;
+    private bool _angry = false;
+    // private float _totalAngryTime = 0;
+    [SerializeField] private SoundManager sm;
     // Start is called before the first frame update
     void Start()
     {
@@ -200,15 +204,18 @@ public class TutME : MonoBehaviour
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
         indicator.transform.parent = objective.transform.parent;
+        sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.6f);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(false);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(true);
+        // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        objective.gameObject.SetActive(true);
+        // objective.gameObject.SetActive(true);
+        objective.Activate();
         objective.SetChildSpriteActive(1);
         objective.StartAnAtState(1);
         objective.GetComponent<Animator>().SetBool("tut", true);
@@ -221,19 +228,23 @@ public class TutME : MonoBehaviour
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
         indicator.transform.parent = objective.transform.parent;
+        sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.6f);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(false);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(true);
+        // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        objective.gameObject.SetActive(true);
+        // objective.gameObject.SetActive(true);
+        objective.Activate();
         objective.SetChildSpriteActive(1);
         objective.StartAnAtState(0);
         _gm.AddToActiveCounter(1);
     }
+
 
     public IEnumerator TentacleAttack()
     {
@@ -306,6 +317,7 @@ public class TutME : MonoBehaviour
     {
         dizzy = val;
     }
+    
 
     public void AdvanceToNextLevel()
     {

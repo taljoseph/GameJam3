@@ -20,6 +20,7 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private float timeBetweenShots = 5f;
     [SerializeField] private float timeBetweenMinions = 10f;
     [SerializeField] private float timeBetweenSwipeAttacks = 20f;
+    [SerializeField] private float timeBetweenWaterAttacks = 10;
     [SerializeField] private Vector3 shootingDirection;
     private List<Crack> _minionTargets;
     public List<Minion> _minions = new List<Minion>();
@@ -51,6 +52,8 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private Animator bodyAnimator;
     private bool _angry = false;
     // private float _totalAngryTime = 0;
+    [SerializeField] private SoundManager sm;
+
 
 
     // Start is called before the first frame update
@@ -195,6 +198,7 @@ public class MainEnemy : MonoBehaviour
                 handR.rotation.eulerAngles.z < _defRotationRight.eulerAngles.z)
             {
                 _rotateRight = false;
+                sm.PlaySound("swipeAttack");
                 handR.rotation = _defRotationRight;
             }
 
@@ -214,6 +218,7 @@ public class MainEnemy : MonoBehaviour
             if (handL.rotation.eulerAngles.z < (_defRotationLeft.eulerAngles.z - 180))
             {
                 _rotateLeft = false;
+                sm.PlaySound("swipeAttack");
                 handL.rotation = _defRotationLeft;
             }
 
@@ -250,15 +255,18 @@ public class MainEnemy : MonoBehaviour
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
         indicator.transform.parent = objective.transform.parent;
+        sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.6f);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(false);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(true);
+        // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        objective.gameObject.SetActive(true);
+        // objective.gameObject.SetActive(true);
+        objective.Activate();
         objective.SetChildSpriteActive(1);
         objective.StartAnAtState(1);
         _gm.AddToActiveCounter(1);
@@ -269,15 +277,18 @@ public class MainEnemy : MonoBehaviour
         Vector3 pos = objective.transform.position;
         var indicator = Instantiate(indicatorPref, pos, Quaternion.identity);
         indicator.transform.parent = objective.transform.parent;
+        sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        indicator.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.6f);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(false);
+        // yield return new WaitForSeconds(0.2f);
+        // indicator.SetActive(true);
+        // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
         yield return new WaitForSeconds(0.2f);
-        objective.gameObject.SetActive(true);
+        // objective.gameObject.SetActive(true);
+        objective.Activate();
         objective.SetChildSpriteActive(1);
         objective.StartAnAtState(0);
         _gm.AddToActiveCounter(1);
@@ -322,11 +333,25 @@ public class MainEnemy : MonoBehaviour
     {
         _curLevel++;
         bodyAnimator.SetTrigger("Rise");
+        sm.PlaySound("advanceLevel");
+        if (_gm.IsLastLevel())
+        {
+            StartCoroutine(WaterAttack());
+        }
         // TODO:
         // 1. Stop all coroutines
         // 2. Calculate kraken going up and down animation time (in "Start")
         // 3. Use coroutine to wait the time above
         // 4. Resume all coroutines
+    }
+
+    private IEnumerator WaterAttack()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(timeBetweenWaterAttacks);
+            bodyAnimator.SetTrigger("Rise");
+        }
     }
 
     public void HitTentacleAnimation()

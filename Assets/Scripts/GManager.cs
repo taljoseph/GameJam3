@@ -37,7 +37,8 @@ public class GManager : MonoBehaviour
     [SerializeField] private float drowningRate = 0;
     [SerializeField] private float shipDrowningCondition = 0;
     [SerializeField] private Image shipDrowningBar;
-    
+    [SerializeField] private SoundManager sm;
+
 
 
     public List<Crack> GetRandomTargets()
@@ -187,6 +188,7 @@ public class GManager : MonoBehaviour
     {
         
         _curHits++;
+        sm.PlaySound("tentacleHit");
         camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         kraken.HitTentacleAnimation();
         if (_curHits >= hitsPerLevel[_curBatch])
@@ -245,12 +247,18 @@ public class GManager : MonoBehaviour
         playerGO.transform.position = p2Trans.position;
         col.enabled = true;
         playerScript.SetDead(false);
+        sm.PlaySound("playerRespawn");
         for (int i = 0; i < 14; i++)
         {
             yield return new WaitForSeconds(0.1f);
             sr.enabled = !sr.enabled;
         }
         playerScript.SetInvincible(false);
+    }
+
+    public bool IsLastLevel()
+    {
+        return _curBatch == drowningThresholds.Count - 1;
     }
 }
 

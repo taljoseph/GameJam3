@@ -23,7 +23,8 @@ public class MainCharacter : MonoBehaviour
     private bool _isFlipped = false;
     private GameObject _axeObj;
     private Collider2D _col;
-    private bool _isInvincibile = false; 
+    private bool _isInvincibile = false;
+    [SerializeField] private SoundManager sm;
     
     
 
@@ -139,8 +140,16 @@ public class MainCharacter : MonoBehaviour
         //     gm.DizzyStat(this);
         // }
 
-        if (!_isInvincibile && curTag.Equals("Hand"))
+        if (!_isInvincibile && (curTag.Equals("Hand") || curTag.Equals("Burst")))
         {
+            if (player.Equals("A"))
+            {
+                sm.PlaySound("player1Death");
+            }
+            else
+            {
+                sm.PlaySound("player2Death");
+            }
             gm.CharacterDied(this, _col, _rb, _an);
         }
         
@@ -182,6 +191,14 @@ public class MainCharacter : MonoBehaviour
     {
         var axe = Instantiate(axePrefab, source.transform.position, Quaternion.identity);
         hasAxe = false;
+        if (player == "A")
+        {
+            sm.PlaySound("throwPlayer1");
+        }
+        else
+        {
+            sm.PlaySound("throwPlayer2");
+        }
         gm.AxeShot(axe);
         var shootScript = axe.GetComponent<ShootObj>();
         shootScript.SetHolder(gameObject);

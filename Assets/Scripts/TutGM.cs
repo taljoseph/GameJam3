@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class TutGM : MonoBehaviour
 {
@@ -32,6 +33,12 @@ public class TutGM : MonoBehaviour
     [SerializeField] private Transform camera;
     private GameObject _curAxe = null;
     [SerializeField] private float characterSpawnTime = 3;
+    [SerializeField] private SoundManager sm;
+    [SerializeField] private TextMeshProUGUI tut0;
+    [SerializeField] private TextMeshProUGUI tut1;
+    [SerializeField] private TextMeshProUGUI tut2;
+
+
     
     //TUT STUFF
     private Vector3 _posP1;
@@ -91,6 +98,8 @@ public class TutGM : MonoBehaviour
         p1.ResetChar();
         p2.ResetChar();
         StartCoroutine(kraken.TentAttackTut1());
+        tut0.enabled = false;
+        tut1.enabled = true;
         // add code for Text
     }
 
@@ -108,6 +117,8 @@ public class TutGM : MonoBehaviour
         p1.ResetChar();
         p2.ResetChar();
         StartCoroutine(kraken.TentAttackTut2());
+        tut1.enabled = false;
+        tut2.enabled = true;
     }
 
     public void TutAttack1End()
@@ -154,13 +165,16 @@ public class TutGM : MonoBehaviour
         {
             if (_spTentActive)
             {
-                print("working");
-                if (!_spTentCrack.gameObject.activeSelf)
+                if (!_spTentCrack.GetComponent<SpriteRenderer>().enabled)
                 {
-                    print("killed");
-                    SceneManager.LoadScene("Tutorial");
+                    SceneManager.LoadScene("shlomiScene");
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SceneManager.LoadScene("shlomiScene");
         }
     }
 
