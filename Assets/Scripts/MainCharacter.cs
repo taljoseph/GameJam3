@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MainCharacter : MonoBehaviour
 {
-    [SerializeField] private String player; // defined for A or B
+    [SerializeField] public String player; // defined for A or B
     [SerializeField] private MainCharacter secondPlayer;
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private GManager gm;
@@ -142,14 +142,6 @@ public class MainCharacter : MonoBehaviour
 
         if (!_isInvincibile && (curTag.Equals("Hand") || curTag.Equals("Burst")))
         {
-            if (player.Equals("A"))
-            {
-                sm.PlaySound("player1Death");
-            }
-            else
-            {
-                sm.PlaySound("player2Death");
-            }
             gm.CharacterDied(this, _col, _rb, _an);
         }
         

@@ -219,6 +219,14 @@ public class GManager : MonoBehaviour
 
     public void CharacterDied(MainCharacter playerScript, Collider2D col, Rigidbody2D rb, Animator an)
     {
+        if (playerScript.player.Equals("A"))
+        {
+            sm.PlaySound("player1Death");
+        }
+        else
+        {
+            sm.PlaySound("player2Death");
+        }
         playerScript.SetDead(true);
         col.enabled = false;
         an.SetTrigger("hit");

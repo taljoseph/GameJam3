@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TutMC : MonoBehaviour
 {
-    [SerializeField] private String player; // defined for A or B
+    [SerializeField] public String player; // defined for A or B
     [SerializeField] private TutMC secondPlayer;
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private TutGM gm;
@@ -186,6 +186,14 @@ public class TutMC : MonoBehaviour
     {
         var axe = Instantiate(axePrefab, source.transform.position, Quaternion.identity);
         hasAxe = false;
+        if (player == "A")
+        {
+            sm.PlaySound("throwPlayer1");
+        }
+        else
+        {
+            sm.PlaySound("throwPlayer2");
+        }
         gm.AxeShot(axe);
         var shootScript = axe.GetComponent<TutSO>();
         shootScript.SetHolder(gameObject);
