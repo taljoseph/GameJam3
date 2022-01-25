@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 779e0841c12cc2249bc1d723da009191
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Corben
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a0f45f7d4db706d4695952a01e9a36a1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

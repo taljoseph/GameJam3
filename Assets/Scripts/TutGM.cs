@@ -222,7 +222,7 @@ public class TutGM : MonoBehaviour
 
     public void AxeHitTentacle()
     {
-        
+        sm.PlaySound("tentacleHit");
         //kraken.SetDizzy(true);
         //StartCoroutine(kraken.HitPenalty());
     }
@@ -264,6 +264,7 @@ public class TutGM : MonoBehaviour
         playerGO.transform.position = p2Trans.position;
         col.enabled = true;
         playerScript.SetDead(false);
+        sm.PlaySound("playerRespawn");
         for (int i = 0; i < 14; i++)
         {
             yield return new WaitForSeconds(0.1f);
