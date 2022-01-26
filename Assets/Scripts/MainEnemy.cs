@@ -257,7 +257,7 @@ public class MainEnemy : MonoBehaviour
         indicator.transform.parent = objective.transform.parent;
         sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.8f);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(false);
         // yield return new WaitForSeconds(0.2f);
@@ -279,7 +279,7 @@ public class MainEnemy : MonoBehaviour
         indicator.transform.parent = objective.transform.parent;
         sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.8f);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(false);
         // yield return new WaitForSeconds(0.2f);
