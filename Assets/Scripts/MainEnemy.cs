@@ -79,17 +79,21 @@ public class MainEnemy : MonoBehaviour
         //         _totalAngryTime += clip.length;
         //     }
         // }
-        
+        StartCoroutine(StartAttacks());
+
+    }
+
+
+    // Update is called once per frame
+    private IEnumerator StartAttacks()
+    {
+        yield return new WaitForSeconds(1.5f);
         StartCoroutine(TentacleAttack());
         StartCoroutine(VulTentAttack());
         // StartCoroutine(SimpleShot());
         // StartCoroutine(SendMinions());
         StartCoroutine(HandAttack());
     }
-
-
-    // Update is called once per frame
-
 
     public void SetMinionTargets()
     {
