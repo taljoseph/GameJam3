@@ -25,7 +25,7 @@ public class TutMC : MonoBehaviour
     private Collider2D _col;
     private bool _isInvincibile = false;
     private List<int> tutLevel = new List<int>() {0, 1, 2, 3};
-    private bool _frozen = false;
+    private bool _frozen = true;
     private Vector3 _originalPos;
     private Quaternion _originalRot;
     [SerializeField] private SoundManager sm;
@@ -249,4 +249,5 @@ public class TutMC : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    
 }

@@ -10,6 +10,7 @@ public class Crack : MonoBehaviour
 {
     [SerializeField] private Color _defaultColour;
     [SerializeField] private SpriteRenderer child_sr;
+    [SerializeField] private SpriteRenderer holecap;
     [SerializeField] private bool _inLevel = false;
     [SerializeField] private GManager _gm;
     private bool _normalTentActive = false;
@@ -141,6 +142,7 @@ public class Crack : MonoBehaviour
     public void SetChildSpriteActive(int val)
     {
         child_sr.enabled = (val == 1);
+        holecap.enabled = (val == 1);
     }
 
     public bool IsClosingCrack()

@@ -37,6 +37,13 @@ public class TutGM : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tut0;
     [SerializeField] private TextMeshProUGUI tut1;
     [SerializeField] private TextMeshProUGUI tut2;
+    
+    [SerializeField] private Animator smt;
+    [SerializeField] private Animator pressStart;
+    [SerializeField] private Animator black;
+    [SerializeField] private int congestionIterations;
+    [SerializeField] private GameObject ui1;
+    
 
 
     
@@ -46,6 +53,7 @@ public class TutGM : MonoBehaviour
     private int _totalPasses = 0;
     private int _totalCracksFixed = 0;
     private List<bool> _tutLevel = new List<bool>(){false,false,false,false};
+    private bool _inTutMenu = true;
     private int _curLevel = 0;
     private bool _spTentActive = false;
     private Crack _spTentCrack = null;
@@ -78,9 +86,22 @@ public class TutGM : MonoBehaviour
             crack.SetId(i);
             allCracks.Add(crack);
         }
-        TutLevel0();
+
     }
 
+    private IEnumerator TransitionToTutorial()
+    {
+        smt.SetTrigger("startPressed");
+        yield return new WaitForSeconds(1);
+        pressStart.SetTrigger("startPressed");
+        ui1.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        _inTutMenu = false;
+        p1.SetFrozen(false);
+        p2.SetFrozen(false);
+        TutLevel0();
+    }
+    
     private void TutLevel0()
     {
         foreach (int child in levels[0])
@@ -133,16 +154,27 @@ public class TutGM : MonoBehaviour
 
     void Update()
     {
+        for (int i = 0; i < congestionIterations; i++)
+        {
+            Debug.Log("crash unity");
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("Main Menu");
 
         }
         camera.transform.rotation = Quaternion.Euler(
-            Mathf.Sin(Time.realtimeSinceStartup),
+            0*Mathf.Sin(Time.realtimeSinceStartup),
             0, 
             Mathf.Sin(Time.realtimeSinceStartup) * 0.5f);
 
+        if (_inTutMenu)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(TransitionToTutorial());
+            }
+        }
         if (_tutLevel[0])
         {
             if (_totalPasses == 4)
@@ -167,7 +199,7 @@ public class TutGM : MonoBehaviour
             {
                 if (!_spTentCrack.GetComponent<SpriteRenderer>().enabled)
                 {
-                    SceneManager.LoadScene("shlomiScene");
+                    StartCoroutine("BlackAndLoad");
                 }
             }
         }
@@ -176,6 +208,14 @@ public class TutGM : MonoBehaviour
         {
             SceneManager.LoadScene("shlomiScene");
         }
+    }
+
+    public IEnumerator BlackAndLoad()
+    {
+        black.SetTrigger("blackIn");
+        camera.DOShakePosition(1, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("shlomiScene");   
     }
 
     public GameObject GetBorders()

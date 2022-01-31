@@ -232,8 +232,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5d91b2616da864c9766e70089d0e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crack: {fileID: 0}
   _gm: {fileID: 0}
+  _mouthAn: {fileID: 0}
+  _waterBurstAn: {fileID: 0}
+  p1: {fileID: 0}
+  p2: {fileID: 0}
+  sm: {fileID: 0}
 --- !u!1 &8980051589887777785
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,6 +353,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultColour: {r: 0, g: 0, b: 0, a: 0}
+  child_sr: {fileID: 0}
   _inLevel: 0
   _gm: {fileID: 0}
   id: 0
+  _waterParticles: {fileID: 0}
+  _smokeParticles: {fileID: 0}
+  _woodParticles: {fileID: 0}
+  splashWaitingTime: 3
+  sm: {fileID: 0}

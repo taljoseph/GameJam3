@@ -143,7 +143,7 @@ public class GManager : MonoBehaviour
         }
 
         camera.transform.rotation = Quaternion.Euler(
-            Mathf.Sin(Time.realtimeSinceStartup) * (0.5f + 2 * shipDrowningCondition),
+            0*Mathf.Sin(Time.realtimeSinceStartup) * (0.5f + 2 * shipDrowningCondition),
             0, 
             Mathf.Sin(Time.realtimeSinceStartup) * (0.5f+ shipDrowningCondition));
     }

@@ -135,6 +135,7 @@ MonoBehaviour:
   timeBetweenShots: 2
   timeBetweenMinions: 6
   timeBetweenSwipeAttacks: 20
+  timeBetweenWaterAttacks: 10
   shootingDirection: {x: 0, y: 0, z: 0}
   _minions: []
   handR: {fileID: 0}
@@ -148,3 +149,6 @@ MonoBehaviour:
   specialTentacleWaitingTime: []
   normalTentacleAttackSize: []
   specialTentacleAttackSize: []
+  eyeAnimator: {fileID: 0}
+  bodyAnimator: {fileID: 0}
+  sm: {fileID: 0}

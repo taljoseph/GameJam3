@@ -50,6 +50,10 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private List<float> specialTentacleAttackSize;
     [SerializeField] private Animator eyeAnimator;
     [SerializeField] private Animator bodyAnimator;
+    [SerializeField] private Animator handRAnimator;
+    [SerializeField] private Animator handLAnimator;
+    [SerializeField] private Animator armsAnimatorR;
+    [SerializeField] private Animator armsAnimatorL;
     private bool _angry = false;
     // private float _totalAngryTime = 0;
     [SerializeField] private SoundManager sm;
@@ -179,7 +183,8 @@ public class MainEnemy : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenSwipeAttacks);
             eyeAnimator.SetTrigger("Angry");
             _angry = true;
-            yield return new WaitForSeconds(2);
+            handRAnimator.SetTrigger("indicator");
+            yield return new WaitForSeconds(5);
             handAttack = true;
             // int shakeTime = 3;
             // GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
@@ -188,6 +193,8 @@ public class MainEnemy : MonoBehaviour
             _rotateRight = true;
             yield return new WaitForSeconds(timeBetweenHands);
             // handB.GetComponent<Rigidbody2D>().DORotate(-450f, 3.5f);
+            handLAnimator.SetTrigger("indicator");
+            yield return new WaitForSeconds(5);
             _rotateLeft = true;
             yield return new WaitForSeconds(2);
             handAttack = false;
@@ -261,14 +268,14 @@ public class MainEnemy : MonoBehaviour
         indicator.transform.parent = objective.transform.parent;
         sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(2f);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(false);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(true);
         // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
         // objective.gameObject.SetActive(true);
         objective.Activate();
         objective.SetChildSpriteActive(1);
@@ -283,14 +290,14 @@ public class MainEnemy : MonoBehaviour
         indicator.transform.parent = objective.transform.parent;
         sm.PlaySound("crackingIndicator");
         indicator.SetActive(true);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(2f);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(false);
         // yield return new WaitForSeconds(0.2f);
         // indicator.SetActive(true);
         // yield return new WaitForSeconds(0.2f);
         Destroy(indicator);
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
         // objective.gameObject.SetActive(true);
         objective.Activate();
         objective.SetChildSpriteActive(1);
@@ -354,7 +361,9 @@ public class MainEnemy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(timeBetweenWaterAttacks);
-            bodyAnimator.SetTrigger("Rise");
+            armsAnimatorR.SetTrigger("downR");
+            armsAnimatorL.SetTrigger("downL");
+            bodyAnimator.SetTrigger("down");
         }
     }
 

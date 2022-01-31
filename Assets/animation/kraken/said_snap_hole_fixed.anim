@@ -20,21 +20,29 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 44ca9f0fb7f33420daff2104bdba5e32, type: 3}
-    - time: 0.06666667
-      value: {fileID: 21300000, guid: d8b94842da4164aca9bde92e32b2b9a5, type: 3}
+      value: {fileID: 21300000, guid: 82a27cf69d1414c26a121a09075259ef, type: 3}
+    - time: 0.083333336
+      value: {fileID: 21300000, guid: c4bcc45fa26464e549b4f20709fc216a, type: 3}
     - time: 0.13333334
-      value: {fileID: 21300000, guid: 30ae9438dd8e545d9b6567926cacd476, type: 3}
-    - time: 0.2
-      value: {fileID: 21300000, guid: d5a5ca2a4db3f4512988b7cd0de9ff29, type: 3}
+      value: {fileID: 21300000, guid: 3dc06519fc64046acabc522644716d43, type: 3}
+    - time: 0.21666667
+      value: {fileID: 21300000, guid: c5fa31224631a440c82c871c5b647292, type: 3}
     - time: 0.3
-      value: {fileID: 21300000, guid: 1140427b53c8c461688da53247b64aae, type: 3}
+      value: {fileID: 21300000, guid: 22837cdcf5c0345c5b9abaa0fa2c76ab, type: 3}
     - time: 0.36666667
-      value: {fileID: 21300000, guid: e8da78b3ae816444795281a7d53f468c, type: 3}
-    - time: 0.43333334
-      value: {fileID: 21300000, guid: 013ae4782a4fb473a81fe61284b3582e, type: 3}
-    - time: 0.5
-      value: {fileID: 21300000, guid: a0ae8df948ce54cc6a556ed74e1346dd, type: 3}
+      value: {fileID: 21300000, guid: def59383e4a184512a1b5e17a1f38d80, type: 3}
+    - time: 0.46666667
+      value: {fileID: 21300000, guid: 6a46653c6c4244c8dbfa10d1e6b8c213, type: 3}
+    - time: 0.53333336
+      value: {fileID: 21300000, guid: 585afc610986e445a96921847848f111, type: 3}
+    - time: 0.6333333
+      value: {fileID: 21300000, guid: 66a997252911542398f8de8df1dd0a21, type: 3}
+    - time: 0.7
+      value: {fileID: 21300000, guid: 3af291121cc7947e6b8892085854959a, type: 3}
+    - time: 0.75
+      value: {fileID: 21300000, guid: 8409d48a90eee480094ca3c4095ac397, type: 3}
+    - time: 0.8333333
+      value: {fileID: 21300000, guid: 8b4971a8e49724baa91cc63d46a6ddc9, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -54,20 +62,24 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 44ca9f0fb7f33420daff2104bdba5e32, type: 3}
-    - {fileID: 21300000, guid: d8b94842da4164aca9bde92e32b2b9a5, type: 3}
-    - {fileID: 21300000, guid: 30ae9438dd8e545d9b6567926cacd476, type: 3}
-    - {fileID: 21300000, guid: d5a5ca2a4db3f4512988b7cd0de9ff29, type: 3}
-    - {fileID: 21300000, guid: 1140427b53c8c461688da53247b64aae, type: 3}
-    - {fileID: 21300000, guid: e8da78b3ae816444795281a7d53f468c, type: 3}
-    - {fileID: 21300000, guid: 013ae4782a4fb473a81fe61284b3582e, type: 3}
-    - {fileID: 21300000, guid: a0ae8df948ce54cc6a556ed74e1346dd, type: 3}
+    - {fileID: 21300000, guid: 82a27cf69d1414c26a121a09075259ef, type: 3}
+    - {fileID: 21300000, guid: c4bcc45fa26464e549b4f20709fc216a, type: 3}
+    - {fileID: 21300000, guid: 3dc06519fc64046acabc522644716d43, type: 3}
+    - {fileID: 21300000, guid: c5fa31224631a440c82c871c5b647292, type: 3}
+    - {fileID: 21300000, guid: 22837cdcf5c0345c5b9abaa0fa2c76ab, type: 3}
+    - {fileID: 21300000, guid: def59383e4a184512a1b5e17a1f38d80, type: 3}
+    - {fileID: 21300000, guid: 6a46653c6c4244c8dbfa10d1e6b8c213, type: 3}
+    - {fileID: 21300000, guid: 585afc610986e445a96921847848f111, type: 3}
+    - {fileID: 21300000, guid: 66a997252911542398f8de8df1dd0a21, type: 3}
+    - {fileID: 21300000, guid: 3af291121cc7947e6b8892085854959a, type: 3}
+    - {fileID: 21300000, guid: 8409d48a90eee480094ca3c4095ac397, type: 3}
+    - {fileID: 21300000, guid: 8b4971a8e49724baa91cc63d46a6ddc9, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.51666665
+    m_StopTime: 0.84999996
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -94,7 +106,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.51666665
+  - time: 0.8333333
     functionName: Deactivate
     data: 
     objectReferenceParameter: {fileID: 0}
