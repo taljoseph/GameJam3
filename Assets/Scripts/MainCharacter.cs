@@ -25,7 +25,7 @@ public class MainCharacter : MonoBehaviour
     private Collider2D _col;
     private bool _isInvincibile = false;
     [SerializeField] private SoundManager sm;
-    
+    private bool _frozen = false;
     
 
 
@@ -45,7 +45,7 @@ public class MainCharacter : MonoBehaviour
 
     void Update()
     {
-        if (!_isDead)
+        if (!_isDead && !_frozen)
         {
             GetDirection();
             if (Input.GetKeyDown(shootKey))
@@ -85,7 +85,7 @@ public class MainCharacter : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isDead)
+        if (!_isDead && !_frozen)
         {
             Move();
         }
@@ -119,6 +119,11 @@ public class MainCharacter : MonoBehaviour
     void Move()
     {
         _rb.velocity = new Vector2(_direction.x * moveSpeed, _direction.y * moveSpeed);
+    }
+
+    public void SetFrozen(bool val)
+    {
+        _frozen = val;
     }
 
     public void SetSpeed(float val)

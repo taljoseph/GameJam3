@@ -17,8 +17,11 @@ public class KrackAttack : MonoBehaviour
     
     private void OnKrakenUp()
     {
-        _mouthAn.SetTrigger("roar");
-        sm.PlaySound("roar");
+        if (!_gm.IsGameOver())
+        {
+            _mouthAn.SetTrigger("roar");
+            sm.PlaySound("roar");            
+        }
         if (_gm.IsLastLevel())
         {
             // int rand = UnityEngine.Random.Range(0, 2);

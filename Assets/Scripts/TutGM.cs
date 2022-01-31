@@ -43,7 +43,7 @@ public class TutGM : MonoBehaviour
     [SerializeField] private Animator black;
     [SerializeField] private int congestionIterations;
     [SerializeField] private GameObject ui1;
-    
+    private Animator _instructionsAn;
 
 
     
@@ -87,6 +87,7 @@ public class TutGM : MonoBehaviour
             allCracks.Add(crack);
         }
 
+        _instructionsAn = ui1.GetComponent<Animator>();
     }
 
     private IEnumerator TransitionToTutorial()
@@ -114,6 +115,7 @@ public class TutGM : MonoBehaviour
 
     private void TutLevel1()
     {
+        _instructionsAn.SetTrigger("closeMessage");
         p1.Freeze(true);
         p2.Freeze(true);
         p1.ResetChar();
@@ -126,6 +128,7 @@ public class TutGM : MonoBehaviour
 
     private void TutLevel2()
     {
+        _instructionsAn.SetTrigger("closeMessage");
         _inactiveCracks.Clear();
         foreach (int child in levels[1])
         {
@@ -212,6 +215,7 @@ public class TutGM : MonoBehaviour
 
     public IEnumerator BlackAndLoad()
     {
+        _instructionsAn.SetTrigger("closeMessage");
         black.SetTrigger("blackIn");
         camera.DOShakePosition(1, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         yield return new WaitForSeconds(1);

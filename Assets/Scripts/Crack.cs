@@ -27,6 +27,7 @@ public class Crack : MonoBehaviour
     [SerializeField] private SoundManager sm;
 
 
+
     public void Awake()
     {
         _defaultColour = GetComponent<SpriteRenderer>().color;
@@ -35,6 +36,7 @@ public class Crack : MonoBehaviour
         _col = GetComponent<Collider2D>();
         // _animator.Play("timer");
     }
+
 
     /// <summary>
     /// Sets new colour

@@ -38,9 +38,19 @@ public class GManager : MonoBehaviour
     [SerializeField] private float shipDrowningCondition = 0;
     [SerializeField] private Image shipDrowningBar;
     [SerializeField] private SoundManager sm;
+    [SerializeField] private Animator blackAn;
+    [SerializeField] private bool isGameOver = false;
+    [SerializeField] private GameObject victory;
+    [SerializeField] private GameObject victoryMessage;
+    private bool _canReset = false;
+    [SerializeField] private Canvas canvas;
 
 
-
+    public bool IsGameOver()
+    {
+        return isGameOver;
+    }
+    
     public List<Crack> GetRandomTargets()
     {
         var numOfInactivePoints = allCracks.Count - activeCracksCounter;
@@ -90,11 +100,19 @@ public class GManager : MonoBehaviour
 
         }
         activeCracksCounter = 0;
+        
 
 
     }
 
+    private void Start()
+    {
+        blackAn.SetTrigger("blackOut");
+        camera.DOShakePosition(2, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+        
+    }
     
+
 
     // private void InitCracks(int level)
     // {
@@ -112,42 +130,76 @@ public class GManager : MonoBehaviour
 
     void Update()
     {
+        if (_canReset)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("shlomiScene");
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("Tutorial"); 
+            }
+        }
         if (_curBatch <= drowningThresholds.Count - 1)
         {
             //Debug.Log(_curBatch);
             if (shipDrowningCondition < 1)
             {
-                shipDrowningCondition += Time.deltaTime * drowningRate;
-                shipDrowningCondition = Mathf.Max(shipDrowningCondition, 0);
+                if (!isGameOver)
+                {
+                    shipDrowningCondition += Time.deltaTime * drowningRate;
+                    shipDrowningCondition = Mathf.Max(shipDrowningCondition, 0);                    
+                }
                 if (shipDrowningCondition <= 0)
                 {
                     drowningRate = 0;
                 }
                 shipDrowningBar.fillAmount = shipDrowningCondition;
-                if (shipDrowningCondition >= 1)
+                if (shipDrowningCondition >= 1 && !isGameOver)
                 {
-                    SceneManager.LoadScene("Lose Scene"); //lose screen
+                    isGameOver = true;
+                    kraken.KrakenWin();
+                    StartCoroutine(LoseSequence());
+
+                    //SceneManager.LoadScene("Lose Scene"); //lose screen
                 }
             }
             
             
-            if (activeCracksCounter >= drowningThresholds[_curBatch])
-            {
-                SceneManager.LoadScene("Lose Scene"); //lose screen
-            }
+            // if (activeCracksCounter >= drowningThresholds[_curBatch])
+            // {
+            //     SceneManager.LoadScene("Lose Scene"); //lose screen
+            // }
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SceneManager.LoadScene("Main Menu");
+                SceneManager.LoadScene("Tutorial");
             }            
         }
 
-        camera.transform.rotation = Quaternion.Euler(
-            0*Mathf.Sin(Time.realtimeSinceStartup) * (0.5f + 2 * shipDrowningCondition),
-            0, 
-            Mathf.Sin(Time.realtimeSinceStartup) * (0.5f+ shipDrowningCondition));
+        if (canvas.enabled)
+        {
+            camera.transform.rotation = Quaternion.Euler(
+                0*Mathf.Sin(Time.realtimeSinceStartup) * (0.5f + 2 * shipDrowningCondition),
+                0, 
+                Mathf.Sin(Time.realtimeSinceStartup) * (0.5f+ shipDrowningCondition));            
+        }
+
     }
 
+    public IEnumerator LoseSequence()
+    {
+        camera.DOShakePosition(2f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
+        blackAn.SetTrigger("blackIn");
+        yield return new WaitForSeconds(2);
+        camera.transform.position = new Vector3(camera.transform.position.x, -14.5f, camera.transform.position.z);
+        canvas.enabled = false;
+        blackAn.SetTrigger("blackOut");
+        _canReset = true;
+        
+    }
+    
     public GameObject GetBorders()
     {
         return borders;
@@ -165,7 +217,7 @@ public class GManager : MonoBehaviour
 
     public void CrackFix(Crack cr)
     {
-        drowningRate -= drowningCloseRates[_curBatch];
+        drowningRate -= drowningCloseRates[Mathf.Min(_curBatch, drowningCloseRates.Count - 1)];
         activeCracksCounter--;
         _inactiveCracks.Add(cr);
         
@@ -191,14 +243,20 @@ public class GManager : MonoBehaviour
         sm.PlaySound("tentacleHit");
         camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         kraken.HitTentacleAnimation();
-        if (_curHits >= hitsPerLevel[_curBatch])
+        if (!isGameOver && _curHits >= hitsPerLevel[_curBatch])
         {
             _curHits = 0;
             _curBatch++;
             Debug.Log("advanced to next level!");
             if (_curBatch >= drowningThresholds.Count)
             {
-                SceneManager.LoadScene("Win Scene");
+                isGameOver = true;
+                kraken.KrakenDie();
+                p1.SetFrozen(true);
+                p2.SetFrozen(true);
+                StartCoroutine(Victory());
+                // stop players, kraken
+                //SceneManager.LoadScene("Win Scene");
             }
             kraken.AdvanceToNextLevel();
             // move to next level
@@ -208,11 +266,21 @@ public class GManager : MonoBehaviour
         //kraken.SetDizzy(true);
         //StartCoroutine(kraken.HitPenalty());
     }
+    
 
+    public IEnumerator Victory()
+    {
+        yield return new WaitForSeconds(3);
+        victory.SetActive(true);
+        victoryMessage.SetActive(true);
+        _canReset = true;
+
+
+    }
 
     public void AddToActiveCounter(int num)
     {
-        drowningRate += drowningOpenRates[_curBatch];
+        drowningRate += drowningOpenRates[Mathf.Min(_curBatch, drowningCloseRates.Count - 1)];
         activeCracksCounter += num;
         Debug.Log(activeCracksCounter);
     }

@@ -57,6 +57,8 @@ public class MainEnemy : MonoBehaviour
     private bool _angry = false;
     // private float _totalAngryTime = 0;
     [SerializeField] private SoundManager sm;
+    [SerializeField] private Animator _mouthAn;
+    [SerializeField] private Animator wholeKrakenAn;
 
 
 
@@ -181,6 +183,10 @@ public class MainEnemy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(timeBetweenSwipeAttacks);
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             eyeAnimator.SetTrigger("Angry");
             _angry = true;
             handRAnimator.SetTrigger("indicator");
@@ -190,11 +196,19 @@ public class MainEnemy : MonoBehaviour
             // GetComponent<Transform>().DOShakePosition(shakeTime, Vector3.right * 0.2f, 20, 0, fadeOut: false);
             // yield return new WaitForSeconds(shakeTime);
             // handA.GetComponent<Rigidbody2D>().DORotate(270f, 3.5f);
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             _rotateRight = true;
             yield return new WaitForSeconds(timeBetweenHands);
             // handB.GetComponent<Rigidbody2D>().DORotate(-450f, 3.5f);
             handLAnimator.SetTrigger("indicator");
             yield return new WaitForSeconds(5);
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             _rotateLeft = true;
             yield return new WaitForSeconds(2);
             handAttack = false;
@@ -242,6 +256,10 @@ public class MainEnemy : MonoBehaviour
     {
         while (true)
         {
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             if (dizzy)
             {
                 yield return new WaitForSeconds(1);
@@ -252,7 +270,7 @@ public class MainEnemy : MonoBehaviour
                 for (int i = 0; i < specialTentacleAttackSize[_curLevel]; i++)
                 {
                     Crack objective = _gm.GetCrack();
-                    if (objective)
+                    if (objective && !_gm.IsGameOver())
                     {
                         StartCoroutine(SingleVulTentAttack(objective));
                     }
@@ -309,6 +327,10 @@ public class MainEnemy : MonoBehaviour
     {
         while (true)
         {
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             if (dizzy)
             {
                 yield return new WaitForSeconds(1);
@@ -319,7 +341,7 @@ public class MainEnemy : MonoBehaviour
                 for (int i = 0; i < normalTentacleAttackSize[_curLevel]; i++)
                 {
                     Crack objective = _gm.GetCrack();
-                    if (objective)
+                    if (objective && !_gm.IsGameOver())
                     {
                         StartCoroutine(SingleTentacleAttack(objective));
                     }
@@ -342,6 +364,10 @@ public class MainEnemy : MonoBehaviour
 
     public void AdvanceToNextLevel()
     {
+        if (_gm.IsGameOver())
+        {
+            return;
+        }
         _curLevel++;
         bodyAnimator.SetTrigger("Rise");
         sm.PlaySound("advanceLevel");
@@ -361,11 +387,33 @@ public class MainEnemy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(timeBetweenWaterAttacks);
+            if (_gm.IsGameOver())
+            {
+                break;
+            }
             armsAnimatorR.SetTrigger("downR");
             armsAnimatorL.SetTrigger("downL");
             bodyAnimator.SetTrigger("down");
         }
     }
+
+    public void KrakenDie()
+    { 
+        _mouthAn.SetTrigger("roar");
+        sm.PlaySound("roar");
+        bodyAnimator.SetTrigger("die");
+        armsAnimatorR.SetTrigger("die");
+        armsAnimatorL.SetTrigger("die");
+        
+        //wholeKrakenAn.SetTrigger("die");    
+    }
+
+    public void KrakenWin()
+    {
+        _mouthAn.SetTrigger("roar");
+        sm.PlaySound("roar"); 
+    }
+    
 
     public void HitTentacleAnimation()
     {
