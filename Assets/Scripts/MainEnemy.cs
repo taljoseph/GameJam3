@@ -203,6 +203,7 @@ public class MainEnemy : MonoBehaviour
                 break;
             }
             _rotateRight = true;
+            sm.PlaySound("swipeAttack");
             yield return new WaitForSeconds(timeBetweenHands);
             // handB.GetComponent<Rigidbody2D>().DORotate(-450f, 3.5f);
             handLAnimator.SetTrigger("indicator");
@@ -212,6 +213,7 @@ public class MainEnemy : MonoBehaviour
                 break;
             }
             _rotateLeft = true;
+            sm.PlaySound("swipeAttack");
             yield return new WaitForSeconds(2);
             handAttack = false;
         }
@@ -225,7 +227,7 @@ public class MainEnemy : MonoBehaviour
                 handR.rotation.eulerAngles.z < _defRotationRight.eulerAngles.z)
             {
                 _rotateRight = false;
-                sm.PlaySound("swipeAttack");
+                //sm.PlaySound("swipeAttack");
                 handR.rotation = _defRotationRight;
             }
 
@@ -245,7 +247,7 @@ public class MainEnemy : MonoBehaviour
             if (handL.rotation.eulerAngles.z < (_defRotationLeft.eulerAngles.z - 180))
             {
                 _rotateLeft = false;
-                sm.PlaySound("swipeAttack");
+                //sm.PlaySound("swipeAttack");
                 handL.rotation = _defRotationLeft;
             }
 

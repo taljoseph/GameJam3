@@ -195,9 +195,12 @@ public class GManager : MonoBehaviour
 
     public IEnumerator LoseSequence()
     {
+        p1.SetFrozen(true);
+        p2.SetFrozen(true);
         camera.DOShakePosition(2f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         blackAn.SetTrigger("blackIn");
         yield return new WaitForSeconds(2);
+        DisableCracks();
         camera.transform.position = new Vector3(camera.transform.position.x, -14.5f, camera.transform.position.z);
         canvas.enabled = false;
         camera.rotation = Quaternion.Euler(0,0,0);
@@ -277,6 +280,7 @@ public class GManager : MonoBehaviour
     public IEnumerator Victory()
     {
         yield return new WaitForSeconds(3);
+        DisableCracks();
         victory.SetActive(true);
         victoryMessage.SetActive(true);
         _canReset = true;
@@ -342,6 +346,15 @@ public class GManager : MonoBehaviour
     {
         return _curBatch == drowningThresholds.Count - 1;
     }
+
+    public void DisableCracks()
+    {
+        foreach (var crack in allCracks)
+        {
+            crack.gameObject.SetActive(false);
+        }
+    }
+    
 }
 
 

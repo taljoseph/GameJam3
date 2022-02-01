@@ -137,6 +137,10 @@ public class Crack : MonoBehaviour
         // StartCoroutine("SplashWater");
     }
 
+    public void PlayWaterSound()
+    {
+        sm.PlaySound("waterLeaking");
+    }
     private IEnumerator SplashWater()
     {
         yield return new WaitForSeconds(splashWaitingTime);

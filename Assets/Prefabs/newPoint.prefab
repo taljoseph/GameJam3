@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2877843401058144525}
   - component: {fileID: 2579417288942052339}
   - component: {fileID: 5685607083376522314}
+  - component: {fileID: 2137244553831552335}
   m_Layer: 0
   m_Name: waterLeakage
   m_TagString: Untagged
@@ -102,6 +103,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &2137244553831552335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402077508989190559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78fa8653d5dc1954583ad76cd79400aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _crack: {fileID: 8980051589887777781}
 --- !u!1 &1750183900766785046
 GameObject:
   m_ObjectHideFlags: 0
@@ -15169,6 +15183,7 @@ MonoBehaviour:
   waterAn: {fileID: 2579417288942052339}
   splashWaitingTime: 12
   sm: {fileID: 0}
+  shouldSplash: 1
 --- !u!95 &3335574967940430814
 Animator:
   serializedVersion: 3

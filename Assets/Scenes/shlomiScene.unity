@@ -5826,7 +5826,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5c5aae97cf1915a41bd714931e8aa48a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f8316446451f1bb46a29e6633c9063a5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -19437,7 +19437,7 @@ MonoBehaviour:
   - 0.026
   - 0.028
   - 0.03
-  hitsPerLevel: 05000000080000000d000000
+  hitsPerLevel: 010000000100000001000000
   camera: {fileID: 1945819631}
   characterSpawnTime: 3
   drowningRate: 0
