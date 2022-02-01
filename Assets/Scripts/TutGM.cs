@@ -129,6 +129,10 @@ public class TutGM : MonoBehaviour
         _inactiveCracks.Clear();
         foreach (int child in levels[1])
         {
+            if (child == 4)
+            {
+               allCracks[child].SetShouldSplash(false); 
+            }
             _inactiveCracks.Add(allCracks[child]);;
         }
         _curLevel++;

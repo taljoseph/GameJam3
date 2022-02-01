@@ -13,6 +13,7 @@ public class KrackAttack : MonoBehaviour
     private float[] _angles = {45, 0, -45};
     private int _counter = 0;
     [SerializeField] private SoundManager sm;
+    private bool shouldAttack = false;
 
     
     private void OnKrakenUp()
@@ -24,6 +25,11 @@ public class KrackAttack : MonoBehaviour
         }
         if (_gm.IsLastLevel())
         {
+            if (!shouldAttack)
+            {
+                shouldAttack = true;
+                return;
+            }
             // int rand = UnityEngine.Random.Range(0, 2);
             // Transform target = rand == 0 ? p1 : p1;
             Transform burstTransform = _waterBurstAn.gameObject.transform;

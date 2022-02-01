@@ -26,6 +26,7 @@ public class Crack : MonoBehaviour
     [SerializeField] private Animator waterAn;
     [SerializeField] private float splashWaitingTime = 3;
     [SerializeField] private SoundManager sm;
+    [SerializeField] private bool shouldSplash = true;
 
 
 
@@ -123,9 +124,12 @@ public class Crack : MonoBehaviour
         _an.Rebind();
         _sr.enabled = true;
         _col.enabled = true;
-        waterAn.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        waterAn.enabled = true;
-        waterAn.Rebind();
+        if (shouldSplash)
+        {
+            waterAn.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            waterAn.enabled = true;
+            waterAn.Rebind();
+        }
         _smokeParticles.Play();
         _woodParticles.Play();
         // child_sr.enabled = true;
@@ -161,6 +165,11 @@ public class Crack : MonoBehaviour
     public bool IsClosingCrack()
     {
         return _closingCrack;
+    }
+
+    public void SetShouldSplash(bool val)
+    {
+        shouldSplash = val;
     }
 
 
