@@ -59,6 +59,8 @@ public class MainEnemy : MonoBehaviour
     [SerializeField] private SoundManager sm;
     [SerializeField] private Animator _mouthAn;
     [SerializeField] private Animator wholeKrakenAn;
+    [SerializeField] private List<Sprite> bodyStatus;
+    private SpriteRenderer bodySR;
 
 
 
@@ -75,8 +77,7 @@ public class MainEnemy : MonoBehaviour
             Physics2D.IgnoreCollision(handL.GetChild(0).GetComponent<Collider2D>(),
                 borders.transform.GetChild(i).GetComponent<Collider2D>(), true);
         }
-        
-        
+
         // AnimationClip[] clips = eyeAnimator.runtimeAnimatorController.animationClips;
         // foreach (AnimationClip clip in clips)
         // {
@@ -85,6 +86,7 @@ public class MainEnemy : MonoBehaviour
         //         _totalAngryTime += clip.length;
         //     }
         // }
+        bodySR = bodyAnimator.gameObject.GetComponent<SpriteRenderer>();
         StartCoroutine(StartAttacks());
 
     }
@@ -364,6 +366,8 @@ public class MainEnemy : MonoBehaviour
 
     public void AdvanceToNextLevel()
     {
+        Debug.Log("Changing Sprite " + _curLevel);
+        bodySR.sprite = bodyStatus[_curLevel];
         if (_gm.IsGameOver())
         {
             return;

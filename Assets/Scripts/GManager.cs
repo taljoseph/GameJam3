@@ -130,6 +130,11 @@ public class GManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            Application.Quit();
+        }
+        
         if (_canReset)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -195,9 +200,9 @@ public class GManager : MonoBehaviour
         yield return new WaitForSeconds(2);
         camera.transform.position = new Vector3(camera.transform.position.x, -14.5f, camera.transform.position.z);
         canvas.enabled = false;
+        camera.rotation = Quaternion.Euler(0,0,0);
         blackAn.SetTrigger("blackOut");
         _canReset = true;
-        
     }
     
     public GameObject GetBorders()
@@ -241,6 +246,7 @@ public class GManager : MonoBehaviour
         
         _curHits++;
         sm.PlaySound("tentacleHit");
+        sm.PlaySound("hitReaction");
         camera.DOShakePosition(0.5f, Vector3.right * 0.2f, 20, 0, fadeOut: false);
         kraken.HitTentacleAnimation();
         if (!isGameOver && _curHits >= hitsPerLevel[_curBatch])

@@ -16,7 +16,9 @@ public class SoundManager : MonoBehaviour
         swipeAttack,
         player1Death,
         player2Death,
-        playerRespawn;
+        playerRespawn,
+        waterLeaking,
+        hitReaction;
     // Start is called before the first frame update
     void Start()
     {
@@ -83,6 +85,12 @@ public class SoundManager : MonoBehaviour
                 break;
             case "playerRespawn":
                 playerRespawn.PlayOneShot(playerRespawn.clip);
+                break;
+            case "waterLeaking":
+                waterLeaking.PlayOneShot(waterLeaking.clip);
+                break;
+            case "hitReaction":
+                hitReaction.PlayOneShot(hitReaction.clip);
                 break;
         }
     }

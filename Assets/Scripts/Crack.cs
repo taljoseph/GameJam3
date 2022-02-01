@@ -23,6 +23,7 @@ public class Crack : MonoBehaviour
     [SerializeField] private ParticleSystem _waterParticles;
     [SerializeField] private ParticleSystem _smokeParticles;
     [SerializeField] private ParticleSystem _woodParticles;
+    [SerializeField] private Animator waterAn;
     [SerializeField] private float splashWaitingTime = 3;
     [SerializeField] private SoundManager sm;
 
@@ -92,6 +93,7 @@ public class Crack : MonoBehaviour
         _an.SetTrigger("fixed");
         sm.PlaySound("crackClose");
         _closingCrack = true;
+        waterAn.SetTrigger("finish");
     }
 
     public void Deactivate()
@@ -101,14 +103,17 @@ public class Crack : MonoBehaviour
         _sr.enabled = false;
         _col.enabled = false;
         _closingCrack = false;
-        if (_waterParticles.isPlaying)
-        {
-            _waterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
-        else
-        {
-            StopCoroutine("SplashWater");
-        }
+        waterAn.enabled = false;
+        waterAn.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        //TODO UNCOMMENT IF USING PARTICLES
+        // if (_waterParticles.isPlaying)
+        // {
+        //     _waterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        // }
+        // else
+        // {
+        //     StopCoroutine("SplashWater");
+        // }
     }
 
     public void Activate()
@@ -118,17 +123,23 @@ public class Crack : MonoBehaviour
         _an.Rebind();
         _sr.enabled = true;
         _col.enabled = true;
+        waterAn.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        waterAn.enabled = true;
+        waterAn.Rebind();
         _smokeParticles.Play();
         _woodParticles.Play();
         // child_sr.enabled = true;
         sm.PlaySound("crackOpen");
-        StartCoroutine("SplashWater");
+        // StartCoroutine("SplashWater");
     }
 
     private IEnumerator SplashWater()
     {
         yield return new WaitForSeconds(splashWaitingTime);
-        _waterParticles.Play();
+        //TODO UNCOMMENT IF USING PARTICLES
+        // _waterParticles.Play();
+        waterAn.SetTrigger("start");
+        sm.PlaySound("waterLeaking");
     }
 
     public bool AnPlaying(String name)

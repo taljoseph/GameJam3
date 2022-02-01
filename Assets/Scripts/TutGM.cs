@@ -34,16 +34,14 @@ public class TutGM : MonoBehaviour
     private GameObject _curAxe = null;
     [SerializeField] private float characterSpawnTime = 3;
     [SerializeField] private SoundManager sm;
-    [SerializeField] private TextMeshProUGUI tut0;
-    [SerializeField] private TextMeshProUGUI tut1;
-    [SerializeField] private TextMeshProUGUI tut2;
-    
+
     [SerializeField] private Animator smt;
     [SerializeField] private Animator pressStart;
     [SerializeField] private Animator black;
     [SerializeField] private int congestionIterations;
     [SerializeField] private GameObject ui1;
     private Animator _instructionsAn;
+    [SerializeField] private GameObject quitSkip;
 
 
     
@@ -96,6 +94,7 @@ public class TutGM : MonoBehaviour
         yield return new WaitForSeconds(1);
         pressStart.SetTrigger("startPressed");
         ui1.SetActive(true);
+        quitSkip.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         _inTutMenu = false;
         p1.SetFrozen(false);
@@ -121,8 +120,6 @@ public class TutGM : MonoBehaviour
         p1.ResetChar();
         p2.ResetChar();
         StartCoroutine(kraken.TentAttackTut1());
-        tut0.enabled = false;
-        tut1.enabled = true;
         // add code for Text
     }
 
@@ -141,8 +138,6 @@ public class TutGM : MonoBehaviour
         p1.ResetChar();
         p2.ResetChar();
         StartCoroutine(kraken.TentAttackTut2());
-        tut1.enabled = false;
-        tut2.enabled = true;
     }
 
     public void TutAttack1End()
@@ -163,7 +158,7 @@ public class TutGM : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene("Tutorial");
 
         }
         camera.transform.rotation = Quaternion.Euler(
@@ -210,6 +205,10 @@ public class TutGM : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             SceneManager.LoadScene("shlomiScene");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            Application.Quit();
         }
     }
 
@@ -267,6 +266,7 @@ public class TutGM : MonoBehaviour
     public void AxeHitTentacle()
     {
         sm.PlaySound("tentacleHit");
+        sm.PlaySound("hitReaction");
         //kraken.SetDizzy(true);
         //StartCoroutine(kraken.HitPenalty());
     }
